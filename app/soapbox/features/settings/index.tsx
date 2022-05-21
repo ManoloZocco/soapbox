@@ -36,7 +36,7 @@ const Settings = () => {
   const features = useAppSelector((state) => getFeatures(state.instance));
   const account = useOwnAccount();
 
-  const baseURL = getBaseURL(account);
+  const baseURL = account ? getBaseURL(account) : '';
 
   const navigateToChangeEmail = () => features.securityAPI ? history.push('/settings/email') : window.open(`${baseURL}/auth/edit`, '_blank');
   const navigateToChangePassword = () => features.securityAPI ? history.push('/settings/password') : window.open(`${baseURL}/auth/edit`, '_blank');
