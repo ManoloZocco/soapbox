@@ -7,6 +7,7 @@ import { fetchMfa } from 'soapbox/actions/mfa';
 import List, { ListItem } from 'soapbox/components/list';
 import { Card, CardBody, CardHeader, CardTitle, Column } from 'soapbox/components/ui';
 import { useAppSelector, useOwnAccount } from 'soapbox/hooks';
+import { getBaseURL } from 'soapbox/utils/accounts';
 import { getFeatures } from 'soapbox/utils/features';
 
 import Preferences from '../preferences';
@@ -35,12 +36,14 @@ const Settings = () => {
   const features = useAppSelector((state) => getFeatures(state.instance));
   const account = useOwnAccount();
 
-  const navigateToChangeEmail = () => history.push('/settings/email');
-  const navigateToChangePassword = () => history.push('/settings/password');
-  const navigateToMfa = () => history.push('/settings/mfa');
+  const baseURL = getBaseURL(account);
+
+  const navigateToChangeEmail = () => features.securityAPI ? history.push('/settings/email') : window.open(`${baseURL}/auth/edit`, '_blank');
+  const navigateToChangePassword = () => features.securityAPI ? history.push('/settings/password') : window.open(`${baseURL}/auth/edit`, '_blank');
+  const navigateToMfa = () => features.securityAPI ? history.push('/settings/mfa') : window.open(`${baseURL}/settings/otp_authentication`, '_blank');
   const navigateToSessions = () => history.push('/settings/tokens');
   const navigateToEditProfile = () => history.push('/settings/profile');
-  const navigateToDeleteAccount = () => history.push('/settings/account');
+  const navigateToDeleteAccount = () => features.securityAPI ? history.push('/settings/account') : window.open(`${baseURL}/settings/delete`, '_blank');
 
   const isMfaEnabled = mfa.getIn(['settings', 'totp']);
 
