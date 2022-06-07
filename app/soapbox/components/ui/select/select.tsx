@@ -11,7 +11,7 @@ const Select = React.forwardRef<HTMLSelectElement, ISelect>((props, ref) => {
   return (
     <select
       ref={ref}
-      className='w-full pl-3 pr-10 py-2 text-base border-gray-300 dark:border-slate-700 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-slate-800 sm:text-sm rounded-md disabled:opacity-50'
+      className='w-full pl-3 pr-10 py-2 text-base border-gray-300 dark:border-slate-700 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-slate-800 dark:text-white sm:text-sm rounded-md disabled:opacity-50'
       {...filteredProps}
     >
       {children}
