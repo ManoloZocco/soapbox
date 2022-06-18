@@ -58,7 +58,6 @@ const ChatWindow: React.FC<IChatWindow> = ({ idx, chatId, windowState }) => {
 
   const handleInputRef = (el: HTMLTextAreaElement) => {
     inputElem.current = el;
-    focusInput();
   };
 
   const focusInput = () => {
