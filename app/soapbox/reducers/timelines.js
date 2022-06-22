@@ -28,6 +28,7 @@ import {
   TIMELINE_DEQUEUE,
   MAX_QUEUED_ITEMS,
   TIMELINE_SCROLL_TOP,
+  TIMELINE_REPLACE,
 } from '../actions/timelines';
 
 const TRUNCATE_LIMIT = 40;
@@ -41,6 +42,7 @@ const initialTimeline = ImmutableMap({
   top: true,
   isLoading: false,
   hasMore: true,
+  feedAccountId: null,
   items: ImmutableOrderedSet(),
   queuedItems: ImmutableOrderedSet(), //max= MAX_QUEUED_ITEMS
   totalQueuedItemsCount: 0, //used for queuedItems overflow for MAX_QUEUED_ITEMS+
@@ -335,6 +337,12 @@ export default function timelines(state = initialState, action) {
       return timelineDisconnect(state, action.timeline);
     case GROUP_REMOVE_STATUS_SUCCESS:
       return removeStatusFromGroup(state, action.groupId, action.id);
+    case TIMELINE_REPLACE:
+      return state
+        .update('home', initialTimeline, timeline => timeline.withMutations(timeline => {
+          timeline.set('items', ImmutableOrderedSet([]));
+        }))
+        .update('home', initialTimeline, timeline => timeline.set('feedAccountId', action.accountId));
     default:
       return state;
   }
