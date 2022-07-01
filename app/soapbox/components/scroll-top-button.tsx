@@ -34,20 +34,14 @@ const ScrollTopButton: React.FC<IScrollTopButton> = ({
   const [scrolled, setScrolled] = useState<boolean>(false);
   const autoload = settings.get('autoloadTimelines') === true;
 
-  const getScrollTop = (): number => {
-    return (document.scrollingElement || document.documentElement).scrollTop;
-  };
+  const handleScroll = useCallback(throttle(() => {
+    const { scrollTop } = (document.scrollingElement || document.documentElement);
 
-  const maybeUnload = () => {
-    if (autoload && getScrollTop() <= autoloadThreshold) {
+    if (autoload && scrollTop <= autoloadThreshold) {
       onClick();
     }
-  };
 
-  const handleScroll = useCallback(throttle(() => {
-    maybeUnload();
-
-    if (getScrollTop() > threshold) {
+    if (scrollTop > threshold) {
       setScrolled(true);
     } else {
       setScrolled(false);
@@ -70,10 +64,6 @@ const ScrollTopButton: React.FC<IScrollTopButton> = ({
       window.removeEventListener('scroll', handleScroll);
     };
   }, [onClick]);
-
-  useEffect(() => {
-    maybeUnload();
-  }, [count]);
 
   const visible = count > 0 && scrolled;
 
