@@ -95,6 +95,7 @@ interface IStatus extends RouteComponentProps {
   withDismiss?: boolean,
   hideActionBar?: boolean,
   hoverable?: boolean,
+  maxContentHeight?: number,
 }
 
 interface IStatusState {
@@ -503,6 +504,7 @@ class Status extends ImmutablePureComponent<IStatus, IStatusState> {
                 onClick={this.handleClick}
                 expanded={!status.hidden}
                 onExpandedToggle={this.handleExpandedToggle}
+                maxContentHeight={this.props.maxContentHeight}
                 collapsable
               />
 
