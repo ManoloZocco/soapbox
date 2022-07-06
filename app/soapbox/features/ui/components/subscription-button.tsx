@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import {
@@ -7,7 +7,7 @@ import {
   unsubscribeAccount,
 } from 'soapbox/actions/accounts';
 import snackbar from 'soapbox/actions/snackbar';
-import { IconButton } from 'soapbox/components/ui';
+import { IconButton, Tooltip } from 'soapbox/components/ui';
 import { useAppDispatch, useFeatures } from 'soapbox/hooks';
 
 import type { Account as AccountEntity } from 'soapbox/types/entities';
@@ -19,16 +19,33 @@ const messages = defineMessages({
   unsubscribeSuccess: { id: 'account.unsubscribe.success', defaultMessage: 'You have unsubscribed from this account.' },
   subscribeFailure: { id: 'account.subscribe.failure', defaultMessage: 'An error occurred trying to subscribed to this account.' },
   unsubscribeFailure: { id: 'account.unsubscribe.failure', defaultMessage: 'An error occurred trying to unsubscribed to this account.' },
+  enableNotifications: { id: 'account.subscribe.enableNotifications', defaultMessage: 'You\'ve disabled web notifications. Please enable to subscribe to this account.' },
 });
 
 interface ISubscriptionButton {
   account: AccountEntity
 }
 
+interface ITooltipWrapper {
+  condition: boolean
+  wrapper: (children: any) => React.ReactElement<any, any>
+}
+
+const TooltipWrapper: React.FC<ITooltipWrapper> = ({ condition, wrapper, children }): any =>
+  condition ? wrapper(children) : children;
+
 const SubscriptionButton = ({ account }: ISubscriptionButton) => {
   const dispatch = useAppDispatch();
   const features = useFeatures();
   const intl = useIntl();
+
+  const [hasWebNotificationsEnabled, setWebNotificationsEnabled] = useState<boolean>(true);
+
+  const checkWebNotifications = () => {
+    Notification.requestPermission()
+      .then((value) => setWebNotificationsEnabled(value === 'granted'))
+      .catch(() => null);
+  };
 
   const isFollowing = account.relationship?.following;
   const isRequested = account.relationship?.requested;
@@ -83,19 +100,31 @@ const SubscriptionButton = ({ account }: ISubscriptionButton) => {
     }
   };
 
+  useEffect(() => {
+    if (features.accountSubscriptions || features.accountNotifies) {
+      checkWebNotifications();
+    }
+  }, []);
+
   if (!features.accountSubscriptions && !features.accountNotifies) {
     return null;
   }
 
   if (isRequested || isFollowing) {
     return (
-      <IconButton
-        src={isSubscribed ? require('@tabler/icons/icons/bell-ringing.svg') : require('@tabler/icons/icons/bell.svg')}
-        onClick={handleToggle}
-        title={title}
-        className='text-primary-700 bg-primary-100 dark:!bg-slate-700 dark:!text-white hover:bg-primary-200 p-2'
-        iconClassName='w-5 h-5'
-      />
+      <TooltipWrapper
+        condition={!hasWebNotificationsEnabled}
+        wrapper={(children) => <Tooltip text={intl.formatMessage(messages.enableNotifications)}>{children}</Tooltip>}
+      >
+        <IconButton
+          src={isSubscribed ? require('@tabler/icons/icons/bell-ringing.svg') : require('@tabler/icons/icons/bell.svg')}
+          onClick={handleToggle}
+          title={hasWebNotificationsEnabled ? title : undefined}
+          className='text-primary-700 bg-primary-100 dark:!bg-slate-700 dark:!text-white hover:bg-primary-200 disabled:hover:bg-primary-100 p-2'
+          iconClassName='w-5 h-5'
+          disabled={!hasWebNotificationsEnabled}
+        />
+      </TooltipWrapper>
     );
   }
 
