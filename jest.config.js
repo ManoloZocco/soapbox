@@ -33,6 +33,9 @@ module.exports = {
     '<rootDir>/node_modules',
     '<rootDir>/app',
   ],
+  'moduleNameMapper': {
+    [`.+\\.(${ASSET_EXTS})$`]: '<rootDir>/jest/fileMock.js',
+  },
   'testMatch': ['**/*/__tests__/**/?(*.|*-)+(test).(ts|js)?(x)'],
   'testEnvironment': 'jsdom',
   'transformIgnorePatterns': [
