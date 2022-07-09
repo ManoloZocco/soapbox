@@ -4,7 +4,8 @@ import { defineMessages, IntlShape } from 'react-intl';
 
 import snackbar from 'soapbox/actions/snackbar';
 import api from 'soapbox/api';
-import { search as emojiSearch } from 'soapbox/features/emoji/emoji_mart_search_light';
+import { isNativeEmoji } from 'soapbox/features/emoji';
+import emojiSearch from 'soapbox/features/emoji/search';
 import { tagHistory } from 'soapbox/settings';
 import { isLoggedIn } from 'soapbox/utils/auth';
 import { getFeatures, parseVersion } from 'soapbox/utils/features';
@@ -20,8 +21,8 @@ import { getSettings } from './settings';
 import { createStatus } from './statuses';
 
 import type { History } from 'history';
-import type { Emoji } from 'soapbox/components/autosuggest_emoji';
 import type { AutoSuggestion } from 'soapbox/components/autosuggest_input';
+import type { Emoji } from 'soapbox/features/emoji';
 import type { AppDispatch, RootState } from 'soapbox/store';
 import type { Account, APIEntity, Status } from 'soapbox/types/entities';
 
@@ -484,7 +485,9 @@ const fetchComposeSuggestionsAccounts = throttle((dispatch, getState, token) => 
 }, 200, { leading: true, trailing: true });
 
 const fetchComposeSuggestionsEmojis = (dispatch: AppDispatch, getState: () => RootState, token: string) => {
-  const results = emojiSearch(token.replace(':', ''), { maxResults: 5 } as any);
+  const state = getState();
+  const results = emojiSearch(token.replace(':', ''), { maxResults: 5 }, state.custom_emojis);
+
   dispatch(readyComposeSuggestionsEmojis(token, results));
 };
 
@@ -524,7 +527,7 @@ const selectComposeSuggestion = (position: number, token: string | null, suggest
     let completion, startPosition;
 
     if (typeof suggestion === 'object' && suggestion.id) {
-      completion    = suggestion.native || suggestion.colons;
+      completion    = isNativeEmoji(suggestion) ? suggestion.native : suggestion.colons;
       startPosition = position - 1;
 
       dispatch(useEmoji(suggestion));

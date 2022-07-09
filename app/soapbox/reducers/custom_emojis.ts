@@ -1,10 +1,10 @@
 import { List as ImmutableList, Map as ImmutableMap, fromJS } from 'immutable';
 
-import { emojis as emojiData } from 'soapbox/features/emoji/emoji_mart_data_light';
-import { addCustomToPool } from 'soapbox/features/emoji/emoji_mart_search_light';
+import { buildCustomEmojis } from 'soapbox/features/emoji';
+import emojiData from 'soapbox/features/emoji/data';
+import { addCustomToPool } from 'soapbox/features/emoji/search';
 
 import { CUSTOM_EMOJIS_FETCH_SUCCESS } from '../actions/custom_emojis';
-import { buildCustomEmojis } from '../features/emoji/emoji';
 
 import type { AnyAction } from 'redux';
 import type { APIEntity } from 'soapbox/types/entities';
@@ -22,7 +22,7 @@ const importEmojis = (customEmojis: APIEntity[]) => {
     // Otherwise it breaks EmojiMart.
     // https://gitlab.com/soapbox-pub/soapbox-fe/-/issues/610
     const shortcode = emoji.get('shortcode', '').toLowerCase();
-    return !emojiData[shortcode];
+    return !emojiData.emojis[shortcode];
   });
 
   autosuggestPopulate(emojis);
