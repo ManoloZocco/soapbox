@@ -1,6 +1,10 @@
+import classNames from 'classnames';
 import { Map as ImmutableMap } from 'immutable';
+import React from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+
+import { IconButton } from 'soapbox/components/ui';
 
 import { useEmoji } from '../../../actions/emojis';
 import { getSettings, changeSetting } from '../../../actions/settings';
@@ -81,4 +85,35 @@ const mapDispatchToProps = (dispatch, { onPickEmoji }) => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(EmojiPickerDropdown);
+const Container = connect(mapStateToProps, mapDispatchToProps)(EmojiPickerDropdown);
+
+const EmojiPickerDropdownWrapper = (props) => {
+  return (
+    <Container
+      render={
+        ({ setPopperReference, title, visible, loading, handleToggle }) => (
+          <IconButton
+            className={classNames({
+              'text-gray-400 hover:text-gray-600': true,
+              'pulse-loading': visible && loading,
+            })}
+            ref={setPopperReference}
+            src={require('@tabler/icons/mood-happy.svg')}
+            title={title}
+            aria-label={title}
+            aria-expanded={visible}
+            role='button'
+            onClick={handleToggle}
+            onKeyDown={handleToggle}
+            tabIndex={0}
+          />
+        )
+      }
+
+      {...props}
+    />
+  );
+};
+
+
+export default EmojiPickerDropdownWrapper;
