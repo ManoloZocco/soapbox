@@ -7,9 +7,10 @@ import Textarea from 'react-textarea-autosize';
 import AutosuggestAccount from '../features/compose/components/autosuggest_account';
 import { isRtl } from '../rtl';
 
-import AutosuggestEmoji, { Emoji } from './autosuggest_emoji';
+import AutosuggestEmoji from './autosuggest_emoji';
 
 import type { List as ImmutableList } from 'immutable';
+import type { Emoji } from 'soapbox/features/emoji';
 
 const textAtCursorMatchesToken = (str: string, caretPosition: number) => {
   let word;
