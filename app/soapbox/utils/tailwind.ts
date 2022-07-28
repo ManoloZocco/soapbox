@@ -37,10 +37,12 @@ const maybeGenerateAccentColor = (brandColor: any): string | null => {
 export const fromLegacyColors = (soapboxConfig: SoapboxConfig): TailwindColorPalette => {
   const brandColor = soapboxConfig.get('brandColor');
   const accentColor = soapboxConfig.get('accentColor');
+  const accent = isHex(accentColor) ? accentColor : maybeGenerateAccentColor(brandColor);
 
   return expandPalette({
     primary: isHex(brandColor) ? brandColor : null,
-    accent: isHex(accentColor) ? accentColor : maybeGenerateAccentColor(brandColor),
+    secondary: accent,
+    accent,
     gray: (isHex(brandColor) ? generateNeutral(brandColor) : null) as any,
   });
 };
