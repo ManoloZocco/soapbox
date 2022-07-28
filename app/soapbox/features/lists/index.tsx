@@ -8,7 +8,7 @@ import { deleteList, fetchLists } from 'soapbox/actions/lists';
 import { openModal } from 'soapbox/actions/modals';
 import Icon from 'soapbox/components/icon';
 import ScrollableList from 'soapbox/components/scrollable_list';
-import { CardHeader, CardTitle, Column, IconButton, Spinner } from 'soapbox/components/ui';
+import { Column, IconButton, Spinner } from 'soapbox/components/ui';
 import { useAppSelector } from 'soapbox/hooks';
 
 import NewListForm from './components/new_list_form';

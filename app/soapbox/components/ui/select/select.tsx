@@ -1,4 +1,3 @@
-import classNames from 'classnames';
 import * as React from 'react';
 
 interface ISelect extends React.SelectHTMLAttributes<HTMLSelectElement> {

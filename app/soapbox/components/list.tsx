@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import * as React from 'react';
 import { v4 as uuidv4 } from 'uuid';
+
 import { SelectDropdown } from '../features/forms';
 
 import Icon from './icon';
@@ -27,18 +28,18 @@ const ListItem: React.FC<IListItem> = ({ label, hint, children, onClick }) => {
   const renderChildren = React.useCallback(() => {
     return React.Children.map(children, (child) => {
       if (React.isValidElement(child)) {
-        const isSelect = child.type === SelectDropdown || child.type === Select
+        const isSelect = child.type === SelectDropdown || child.type === Select;
 
         return React.cloneElement(child, {
           id: domId,
           className: classNames({
-            'w-auto': isSelect
-          })
+            'w-auto': isSelect,
+          }),
         });
       }
 
       return null;
-    })
+    });
   }, [children, domId]);
 
   return (

@@ -2,9 +2,6 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Sparklines, SparklinesCurve } from 'react-sparklines';
 
-import { getSoapboxConfig } from 'soapbox/actions/soapbox';
-import { useAppSelector } from 'soapbox/hooks';
-
 import { shortNumberFormat } from '../utils/numbers';
 
 import Permalink from './permalink';
@@ -18,7 +15,6 @@ interface IHashtag {
 
 const Hashtag: React.FC<IHashtag> = ({ hashtag }) => {
   const count = Number(hashtag.history?.get(0)?.accounts);
-  const brandColor = useAppSelector((state) => getSoapboxConfig(state).brandColor);
 
   return (
     <HStack alignItems='center' justifyContent='between' data-testid='hashtag'>

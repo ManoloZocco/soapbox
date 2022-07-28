@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import { Icon } from 'soapbox/components/ui';
+
 import Select from '../../../components/ui/select/select';
 
 const messages = defineMessages({

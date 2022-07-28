@@ -8,7 +8,6 @@ import { fetchOwnAccounts, logOut, switchAccount } from 'soapbox/actions/auth';
 import { getSettings } from 'soapbox/actions/settings';
 import { closeSidebar } from 'soapbox/actions/sidebar';
 import Account from 'soapbox/components/account';
-import SiteLogo from 'soapbox/components/site-logo';
 import { Stack } from 'soapbox/components/ui';
 import ProfileStats from 'soapbox/features/ui/components/profile_stats';
 import { useAppSelector, useFeatures } from 'soapbox/hooks';
@@ -150,7 +149,7 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
           onClick={handleClose}
           src={require('@tabler/icons/x.svg')}
           ref={closeButtonRef}
-          iconClassName="h-6 w-6"
+          iconClassName='h-6 w-6'
           className='fixed top-5 right-5 text-gray-600 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'
         />
       </div>
@@ -317,7 +316,7 @@ const SidebarMenu: React.FC = (): JSX.Element | null => {
 
                       <NavLink className='flex items-center py-2 space-x-1' to='/login/add' onClick={handleClose}>
                         <Icon className='text-primary-500 w-4 h-4' src={require('@tabler/icons/plus.svg')} />
-                        <Text size="sm" weight="medium">{intl.formatMessage(messages.addAccount)}</Text>
+                        <Text size='sm' weight='medium'>{intl.formatMessage(messages.addAccount)}</Text>
                       </NavLink>
                     </div>
                   )}
