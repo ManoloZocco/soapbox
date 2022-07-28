@@ -147,6 +147,7 @@ const maybeAddMissingColors = (soapboxConfig: SoapboxConfigMap): SoapboxConfigMa
   const missing = ImmutableMap({
     'gradient-start': colors.getIn(['primary', '500']),
     'gradient-end': colors.getIn(['accent', '500']),
+    'accent-blue': colors.getIn(['primary', '600']),
   });
 
   return soapboxConfig.set('colors', missing.mergeDeep(colors));
