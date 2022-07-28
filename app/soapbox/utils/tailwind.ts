@@ -1,7 +1,7 @@
 import { Map as ImmutableMap, fromJS } from 'immutable';
 
 import tintify from 'soapbox/utils/colors';
-import { generateAccent } from 'soapbox/utils/theme';
+import { generateAccent, generateNeutral } from 'soapbox/utils/theme';
 
 import type { TailwindColorPalette } from 'soapbox/types/colors';
 
@@ -41,6 +41,7 @@ export const fromLegacyColors = (soapboxConfig: SoapboxConfig): TailwindColorPal
   return expandPalette({
     primary: isHex(brandColor) ? brandColor : null,
     accent: isHex(accentColor) ? accentColor : maybeGenerateAccentColor(brandColor),
+    gray: (isHex(brandColor) ? generateNeutral(brandColor) : null) as any,
   });
 };
 
