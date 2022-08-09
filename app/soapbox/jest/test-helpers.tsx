@@ -90,11 +90,17 @@ const customRender = (
   ...options,
 });
 
-const queryWrapper: React.FC = ({ children }) => (
-  <QueryClientProvider client={queryClient}>
-    {children}
-  </QueryClientProvider>
-);
+const queryWrapper: React.FC = ({ children }) => {
+  const store = createTestStore(rootState);
+
+  return (
+    <Provider store={store}>
+      <QueryClientProvider client={queryClient}>
+        {children}
+      </QueryClientProvider>
+    </Provider>
+  );
+};
 
 const mockWindowProperty = (property: any, value: any) => {
   const { [property]: originalProperty } = window;
