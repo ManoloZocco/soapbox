@@ -10,6 +10,7 @@ const sharedConfig = require('./shared');
 const watchOptions = {};
 
 const {
+  PORT,
   DEVSERVER_URL,
   BACKEND_URL,
   PATRON_URL,
@@ -17,7 +18,7 @@ const {
 } = process.env;
 
 const DEFAULTS = {
-  DEVSERVER_URL: 'http://localhost:3036',
+  DEVSERVER_URL: `http://localhost:${PORT || '3036'}`,
   PATRON_URL: 'http://localhost:3037',
 };
 
