@@ -42,7 +42,7 @@ const HomePage: React.FC = ({ children }) => {
         {me && (
           <Card variant='rounded' ref={composeBlock}>
             <CardBody>
-              <div className='flex items-start space-x-4'>
+              <div className='relative flex items-start space-x-4'>
                 <Link to={`/@${acct}`}>
                   <Avatar account={account} size={46} />
                 </Link>
