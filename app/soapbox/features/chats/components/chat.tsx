@@ -35,28 +35,25 @@ const Chat: React.FC<IChat> = ({ chatId, onClick }) => {
       <button className='floating-link' onClick={() => onClick(chat)} />
       <HStack key={account.id} space={3} className='relative'>
         <Avatar src={account.avatar} size={36} />
-        <Stack>
+        <Stack className='grow overflow-hidden'>
           <DisplayName account={account} withSuffix={false} />
-          {attachment && (
-            <Icon
-              className='chat__attachment-icon'
-              src={image ? require('@tabler/icons/photo.svg') : require('@tabler/icons/paperclip.svg')}
-            />
-          )}
-          {content ? (
-            <Text
-              theme='muted'
-              size='sm'
-              className='chat__last-message'
-              dangerouslySetInnerHTML={{ __html: parsedContent }}
-            />
-          ) : attachment && (
-            <span
-              className='chat__last-message attachment'
-            >
-              {image ? <FormattedMessage id='chats.attachment_image' defaultMessage='Image' /> : <FormattedMessage id='chats.attachment' defaultMessage='Attachment' />}
-            </span>
-          )}
+          <HStack space={1} justifyContent='between'>
+            {content ? (
+              <Text
+                theme='muted'
+                size='sm'
+                className='overflow-hidden text-ellipsis whitespace-nowrap max-h-5'
+                dangerouslySetInnerHTML={{ __html: parsedContent }}
+              />
+            ) : attachment && (
+              <Text theme='muted' size='sm' className='italic'>
+                {image ? <FormattedMessage id='chats.attachment_image' defaultMessage='Image' /> : <FormattedMessage id='chats.attachment' defaultMessage='Attachment' />}
+              </Text>
+            )}
+            {attachment && (
+              <Icon src={image ? require('@tabler/icons/photo.svg') : require('@tabler/icons/paperclip.svg')} />
+            )}
+          </HStack>
           {unreadCount > 0 && (
             <div className='absolute top-1 right-0'>
               <Counter count={unreadCount} />

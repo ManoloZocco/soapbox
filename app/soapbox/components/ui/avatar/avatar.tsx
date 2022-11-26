@@ -21,6 +21,7 @@ const Avatar = (props: IAvatar) => {
   const style: React.CSSProperties = React.useMemo(() => ({
     width: size,
     height: size,
+    minWidth: size,
   }), [size]);
 
   return (
