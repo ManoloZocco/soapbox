@@ -6,6 +6,7 @@ import { makeGetStatus } from 'soapbox/selectors';
 
 interface IStatusContainer extends Omit<IStatus, 'status'> {
   id: string,
+  avatarSize?: number,
   /** @deprecated Unused. */
   contextType?: any,
   /** @deprecated Unused. */

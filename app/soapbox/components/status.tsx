@@ -37,10 +37,9 @@ const messages = defineMessages({
   reblogged_by: { id: 'status.reblogged_by', defaultMessage: '{name} reposted' },
 });
 
-const avatarSize = 42;
-
 export interface IStatus {
   id?: string,
+  avatarSize?: number,
   status: StatusEntity,
   onClick?: () => void,
   muted?: boolean,
@@ -60,6 +59,7 @@ export interface IStatus {
 const Status: React.FC<IStatus> = (props) => {
   const {
     status,
+    avatarSize = 42,
     focusable = true,
     hoverable = true,
     onClick,
