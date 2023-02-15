@@ -117,9 +117,9 @@ type DisplayMedia = 'default' | 'hide_all' | 'show_all';
 type RouteParams = { statusId: string };
 
 interface IThread {
-  params: RouteParams,
-  onOpenMedia: (media: ImmutableList<AttachmentEntity>, index: number) => void,
-  onOpenVideo: (video: AttachmentEntity, time: number) => void,
+  params: RouteParams
+  onOpenMedia: (media: ImmutableList<AttachmentEntity>, index: number) => void
+  onOpenVideo: (video: AttachmentEntity, time: number) => void
 }
 
 const Thread: React.FC<IThread> = (props) => {
@@ -484,7 +484,7 @@ const Thread: React.FC<IThread> = (props) => {
 
           {!isUnderReview ? (
             <>
-              <hr className='mb-2 border-t-2 dark:border-primary-800' />
+              <hr className='dark:border-primary-800 mb-2 border-t-2' />
 
               <StatusActionBar
                 status={status}
@@ -498,7 +498,7 @@ const Thread: React.FC<IThread> = (props) => {
       </HotKeys>
 
       {hasDescendants && (
-        <hr className='mt-2 border-t-2 dark:border-primary-800' />
+        <hr className='dark:border-primary-800 mt-2 border-t-2' />
       )}
     </div>
   );

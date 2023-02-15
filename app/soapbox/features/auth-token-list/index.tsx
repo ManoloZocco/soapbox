@@ -16,8 +16,8 @@ const messages = defineMessages({
 });
 
 interface IAuthToken {
-  token: Token,
-  isCurrent: boolean,
+  token: Token
+  isCurrent: boolean
 }
 
 const AuthToken: React.FC<IAuthToken> = ({ token, isCurrent }) => {
@@ -41,7 +41,7 @@ const AuthToken: React.FC<IAuthToken> = ({ token, isCurrent }) => {
   };
 
   return (
-    <div className='rounded-lg bg-gray-100 p-4 dark:bg-primary-800'>
+    <div className='dark:bg-primary-800 rounded-lg bg-gray-100 p-4'>
       <Stack space={2}>
         <Stack>
           <Text size='md' weight='medium'>{token.app_name}</Text>

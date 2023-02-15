@@ -16,9 +16,9 @@ const List: React.FC<IList> = ({ children }) => (
 );
 
 interface IListItem {
-  label: React.ReactNode,
-  hint?: React.ReactNode,
-  onClick?(): void,
+  label: React.ReactNode
+  hint?: React.ReactNode
+  onClick?(): void
   onSelect?(): void
   isSelected?: boolean
   children?: React.ReactNode
@@ -84,7 +84,7 @@ const ListItem: React.FC<IListItem> = ({ label, hint, children, onClick, onSelec
           {children}
 
           {isSelected ? (
-            <Icon src={require('@tabler/icons/check.svg')} className='ml-1 text-primary-500 dark:text-primary-400' />
+            <Icon src={require('@tabler/icons/check.svg')} className='text-primary-500 dark:text-primary-400 ml-1' />
           ) : null}
         </div>
       ) : null}

@@ -16,23 +16,23 @@ import type { InputThemes } from 'soapbox/components/ui/input/input';
 export type AutoSuggestion = string | Emoji;
 
 export interface IAutosuggestInput extends Pick<React.HTMLAttributes<HTMLInputElement>, 'onChange' | 'onKeyUp' | 'onKeyDown'> {
-  value: string,
-  suggestions: ImmutableList<any>,
-  disabled?: boolean,
-  placeholder?: string,
-  onSuggestionSelected: (tokenStart: number, lastToken: string | null, suggestion: AutoSuggestion) => void,
-  onSuggestionsClearRequested: () => void,
-  onSuggestionsFetchRequested: (token: string) => void,
-  autoFocus: boolean,
-  autoSelect: boolean,
-  className?: string,
-  id?: string,
-  searchTokens: string[],
-  maxLength?: number,
-  menu?: Menu,
-  renderSuggestion?: React.FC<{ id: string }>,
-  hidePortal?: boolean,
-  theme?: InputThemes,
+  value: string
+  suggestions: ImmutableList<any>
+  disabled?: boolean
+  placeholder?: string
+  onSuggestionSelected: (tokenStart: number, lastToken: string | null, suggestion: AutoSuggestion) => void
+  onSuggestionsClearRequested: () => void
+  onSuggestionsFetchRequested: (token: string) => void
+  autoFocus: boolean
+  autoSelect: boolean
+  className?: string
+  id?: string
+  searchTokens: string[]
+  maxLength?: number
+  menu?: Menu
+  renderSuggestion?: React.FC<{ id: string }>
+  hidePortal?: boolean
+  theme?: InputThemes
 }
 
 export default class AutosuggestInput extends ImmutablePureComponent<IAutosuggestInput> {
@@ -234,7 +234,7 @@ export default class AutosuggestInput extends ImmutablePureComponent<IAutosugges
 
     return menu.map((item, i) => (
       <a
-        className={clsx('flex cursor-pointer items-center space-x-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 dark:text-gray-500 dark:hover:bg-gray-800 dark:focus:bg-primary-800', { selected: suggestions.size - selectedSuggestion === i })}
+        className={clsx('dark:focus:bg-primary-800 flex cursor-pointer items-center space-x-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 dark:text-gray-500 dark:hover:bg-gray-800', { selected: suggestions.size - selectedSuggestion === i })}
         href='#'
         role='button'
         tabIndex={0}

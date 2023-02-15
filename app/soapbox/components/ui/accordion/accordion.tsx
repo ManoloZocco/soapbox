@@ -16,11 +16,11 @@ const messages = defineMessages({
 });
 
 interface IAccordion {
-  headline: React.ReactNode,
-  children?: React.ReactNode,
-  menu?: Menu,
-  expanded?: boolean,
-  onToggle?: (value: boolean) => void,
+  headline: React.ReactNode
+  children?: React.ReactNode
+  menu?: Menu
+  expanded?: boolean
+  onToggle?: (value: boolean) => void
 }
 
 /**
@@ -36,7 +36,7 @@ const Accordion: React.FC<IAccordion> = ({ headline, children, menu, expanded = 
   };
 
   return (
-    <div className='rounded-lg bg-white text-gray-900 shadow dark:bg-primary-800 dark:text-gray-100 dark:shadow-none'>
+    <div className='dark:bg-primary-800 rounded-lg bg-white text-gray-900 shadow dark:text-gray-100 dark:shadow-none'>
       <button
         type='button'
         onClick={handleToggle}

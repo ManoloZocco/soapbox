@@ -304,7 +304,7 @@ const DropdownMenu = (props: IDropdownMenu) => {
             data-testid='dropdown-menu'
             ref={refs.setFloating}
             className={
-              clsx('z-[1001] w-56 rounded-md bg-white py-1 shadow-lg transition-opacity duration-100 focus:outline-none dark:bg-gray-900 dark:ring-2 dark:ring-primary-700', {
+              clsx('dark:ring-primary-700 z-[1001] w-56 rounded-md bg-white py-1 shadow-lg transition-opacity duration-100 focus:outline-none dark:bg-gray-900 dark:ring-2', {
                 'opacity-0 pointer-events-none': !isOpen,
               })
             }

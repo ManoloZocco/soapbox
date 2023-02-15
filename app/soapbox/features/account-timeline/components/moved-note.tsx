@@ -8,8 +8,8 @@ import { HStack, Text } from 'soapbox/components/ui';
 import type { Account as AccountEntity } from 'soapbox/types/entities';
 
 interface IMovedNote {
-  from: AccountEntity,
-  to: AccountEntity,
+  from: AccountEntity
+  to: AccountEntity
 }
 
 const MovedNote: React.FC<IMovedNote> = ({ from, to }) => (
@@ -17,7 +17,7 @@ const MovedNote: React.FC<IMovedNote> = ({ from, to }) => (
     <HStack className='mb-2' alignItems='center' space={1.5}>
       <Icon
         src={require('@tabler/icons/briefcase.svg')}
-        className='flex-none text-primary-600 dark:text-primary-400'
+        className='text-primary-600 dark:text-primary-400 flex-none'
       />
 
       <div className='truncate'>

@@ -31,9 +31,9 @@ const initialSuggestionState = {
 };
 
 interface Suggestion {
-  list: { native: string, colons: string }[],
-  tokenStart: number,
-  token: string,
+  list: { native: string, colons: string }[]
+  tokenStart: number
+  token: string
 }
 
 interface IChatComposer extends Pick<React.TextareaHTMLAttributes<HTMLTextAreaElement>, 'onKeyDown' | 'onChange' | 'onPaste' | 'disabled'> {
@@ -144,7 +144,7 @@ const ChatComposer = React.forwardRef<HTMLTextAreaElement | null, IChatComposer>
 
   if (isBlocking) {
     return (
-      <div className='mt-auto p-6 shadow-3xl dark:border-t-2 dark:border-solid dark:border-gray-800'>
+      <div className='shadow-3xl mt-auto p-6 dark:border-t-2 dark:border-solid dark:border-gray-800'>
         <Stack space={3} alignItems='center'>
           <Text align='center' theme='muted'>
             {intl.formatMessage(messages.blocked)}
@@ -163,7 +163,7 @@ const ChatComposer = React.forwardRef<HTMLTextAreaElement | null, IChatComposer>
   }
 
   return (
-    <div className='mt-auto px-4 shadow-3xl'>
+    <div className='shadow-3xl mt-auto px-4'>
       {/* Spacer */}
       <div className='h-5' />
 
@@ -173,7 +173,7 @@ const ChatComposer = React.forwardRef<HTMLTextAreaElement | null, IChatComposer>
             <UploadButton
               onSelectFile={onSelectFile}
               resetFileKey={resetFileKey}
-              iconClassName='w-5 h-5'
+              iconClassName='h-5 w-5'
               className='text-primary-500'
               disabled={isUploading || (attachments.length >= attachmentLimit)}
             />
@@ -228,7 +228,7 @@ const ChatComposer = React.forwardRef<HTMLTextAreaElement | null, IChatComposer>
 
           <IconButton
             src={require('@tabler/icons/send.svg')}
-            iconClassName='w-5 h-5'
+            iconClassName='h-5 w-5'
             className='text-primary-500'
             disabled={isSubmitDisabled}
             onClick={onSubmit}

@@ -63,7 +63,7 @@ const Navbar = () => {
   if (mfaToken) return <Redirect to={`/login?token=${encodeURIComponent(mfaToken)}`} />;
 
   return (
-    <nav className='sticky top-0 z-50 bg-white shadow dark:bg-primary-900' ref={node} data-testid='navbar'>
+    <nav className='dark:bg-primary-900 sticky top-0 z-50 bg-white shadow' ref={node} data-testid='navbar'>
       <div className='mx-auto max-w-7xl px-2 sm:px-6 lg:px-8'>
         <div className='relative flex h-12 justify-between lg:h-16'>
           {account && (
@@ -129,7 +129,7 @@ const Navbar = () => {
                       <IconButton
                         src={require('@tabler/icons/help.svg')}
                         className='cursor-pointer bg-transparent text-gray-400 hover:text-gray-700 dark:text-gray-500 dark:hover:text-gray-200'
-                        iconClassName='w-5 h-5'
+                        iconClassName='h-5 w-5'
                       />
                     </Tooltip>
                   </Link>

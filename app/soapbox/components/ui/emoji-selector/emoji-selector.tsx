@@ -9,13 +9,13 @@ import { useSoapboxConfig } from 'soapbox/hooks';
 
 interface IEmojiButton {
   /** Unicode emoji character. */
-  emoji: string,
+  emoji: string
   /** Event handler when the emoji is clicked. */
   onClick(emoji: string): void
   /** Extra class name on the <button> element. */
-  className?: string,
+  className?: string
   /** Tab order of the button. */
-  tabIndex?: number,
+  tabIndex?: number
 }
 
 /** Clickable emoji button that scales when hovered. */
@@ -128,7 +128,7 @@ const EmojiSelector: React.FC<IEmojiSelector> = ({
         />
       ) : (
         <HStack
-          className={clsx('z-[999] flex w-max max-w-[100vw] flex-wrap space-x-3 rounded-full bg-white px-3 py-2.5 shadow-lg focus:outline-none dark:bg-gray-900 dark:ring-2 dark:ring-primary-700')}
+          className={clsx('dark:ring-primary-700 z-[999] flex w-max max-w-[100vw] flex-wrap space-x-3 rounded-full bg-white px-3 py-2.5 shadow-lg focus:outline-none dark:bg-gray-900 dark:ring-2')}
         >
           {Array.from(soapboxConfig.allowedEmoji).map((emoji, i) => (
             <EmojiButton

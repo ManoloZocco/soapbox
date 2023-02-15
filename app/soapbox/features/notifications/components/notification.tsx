@@ -154,13 +154,13 @@ const buildMessage = (
 const avatarSize = 48;
 
 interface INotificaton {
-  hidden?: boolean,
-  notification: NotificationEntity,
-  onMoveUp?: (notificationId: string) => void,
-  onMoveDown?: (notificationId: string) => void,
-  onReblog?: (status: StatusEntity, e?: KeyboardEvent) => void,
-  getScrollPosition?: () => ScrollPosition | undefined,
-  updateScrollBottom?: (bottom: number) => void,
+  hidden?: boolean
+  notification: NotificationEntity
+  onMoveUp?: (notificationId: string) => void
+  onMoveDown?: (notificationId: string) => void
+  onReblog?: (status: StatusEntity, e?: KeyboardEvent) => void
+  getScrollPosition?: () => ScrollPosition | undefined
+  updateScrollBottom?: (bottom: number) => void
 }
 
 const Notification: React.FC<INotificaton> = (props) => {
@@ -276,7 +276,7 @@ const Notification: React.FC<INotificaton> = (props) => {
       return (
         <Icon
           src={icons[type]}
-          className='flex-none text-primary-600 dark:text-primary-400'
+          className='text-primary-600 dark:text-primary-400 flex-none'
         />
       );
     } else {

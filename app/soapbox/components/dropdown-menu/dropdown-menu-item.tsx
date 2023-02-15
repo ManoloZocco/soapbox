@@ -73,7 +73,7 @@ const DropdownMenuItem = ({ index, item, onClick }: IDropdownMenuItem) => {
   }
 
   return (
-    <li className='truncate focus-within:ring-2 focus-within:ring-primary-500'>
+    <li className='focus-within:ring-primary-500 truncate focus-within:ring-2'>
       <a
         href={item.href || item.to || '#'}
         role='button'

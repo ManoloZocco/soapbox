@@ -23,8 +23,8 @@ const messages = defineMessages({
 });
 
 interface IChatListItemInterface {
-  chat: IChat,
-  onClick: (chat: any) => void,
+  chat: IChat
+  onClick: (chat: any) => void
 }
 
 const ChatListItem: React.FC<IChatListItemInterface> = ({ chat, onClick }) => {
@@ -68,7 +68,7 @@ const ChatListItem: React.FC<IChatListItemInterface> = ({ chat, onClick }) => {
       role='button'
       key={chat.id}
       onClick={() => onClick(chat)}
-      className='group flex w-full flex-col rounded-lg px-2 py-3 hover:bg-gray-100 focus:shadow-inset-ring dark:hover:bg-gray-800'
+      className='focus:shadow-inset-ring group flex w-full flex-col rounded-lg px-2 py-3 hover:bg-gray-100 dark:hover:bg-gray-800'
       data-testid='chat-list-item'
     >
       <HStack alignItems='center' justifyContent='between' space={2} className='w-full'>
@@ -120,7 +120,7 @@ const ChatListItem: React.FC<IChatListItemInterface> = ({ chat, onClick }) => {
                   src={require('@tabler/icons/dots.svg')}
                   title='Settings'
                   className='text-gray-600 hover:text-gray-700 dark:text-gray-600 dark:hover:text-gray-500'
-                  iconClassName='w-4 h-4'
+                  iconClassName='h-4 w-4'
                 />
               </DropdownMenu>
             </div>
@@ -130,7 +130,7 @@ const ChatListItem: React.FC<IChatListItemInterface> = ({ chat, onClick }) => {
             <>
               {chat.last_message.unread && (
                 <div
-                  className='h-2 w-2 rounded-full bg-secondary-500'
+                  className='bg-secondary-500 h-2 w-2 rounded-full'
                   data-testid='chat-unread-indicator'
                 />
               )}

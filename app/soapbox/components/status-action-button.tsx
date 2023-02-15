@@ -12,7 +12,7 @@ const COLORS = {
 type Color = keyof typeof COLORS;
 
 interface IStatusActionCounter {
-  count: number,
+  count: number
 }
 
 /** Action button numerical counter, eg "5" likes. */
@@ -25,14 +25,14 @@ const StatusActionCounter: React.FC<IStatusActionCounter> = ({ count = 0 }): JSX
 };
 
 interface IStatusActionButton extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  iconClassName?: string,
-  icon: string,
-  count?: number,
-  active?: boolean,
-  color?: Color,
-  filled?: boolean,
-  emoji?: string,
-  text?: React.ReactNode,
+  iconClassName?: string
+  icon: string
+  count?: number
+  active?: boolean
+  color?: Color
+  filled?: boolean
+  emoji?: string
+  text?: React.ReactNode
 }
 
 const StatusActionButton = React.forwardRef<HTMLButtonElement, IStatusActionButton>((props, ref): JSX.Element => {
@@ -82,7 +82,7 @@ const StatusActionButton = React.forwardRef<HTMLButtonElement, IStatusActionButt
         'flex items-center rounded-full p-1 rtl:space-x-reverse',
         'text-gray-600 hover:text-gray-600 dark:hover:text-white',
         'bg-white dark:bg-transparent',
-        'focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:ring-offset-0',
+        'focus:ring-primary-500 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:ring-offset-0',
         {
           'text-black dark:text-white': active && emoji,
           'hover:text-gray-600 dark:hover:text-white': !filteredProps.disabled,

@@ -8,8 +8,8 @@ import { useAppSelector } from 'soapbox/hooks';
 import type { List as ImmutableList } from 'immutable';
 
 interface IUploadButton {
-  disabled?: boolean,
-  onSelectFile: (files: FileList) => void,
+  disabled?: boolean
+  onSelectFile: (files: FileList) => void
 }
 
 const UploadButton: React.FC<IUploadButton> = ({ disabled, onSelectFile }) => {
@@ -27,7 +27,7 @@ const UploadButton: React.FC<IUploadButton> = ({ disabled, onSelectFile }) => {
   };
 
   return (
-    <HStack className='h-full w-full cursor-pointer text-primary-500 dark:text-accent-blue' space={3} alignItems='center' justifyContent='center' element='label'>
+    <HStack className='text-primary-500 dark:text-accent-blue h-full w-full cursor-pointer' space={3} alignItems='center' justifyContent='center' element='label'>
       <Icon
         src={require('@tabler/icons/photo-plus.svg')}
         className='h-7 w-7'

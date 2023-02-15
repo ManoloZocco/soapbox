@@ -12,8 +12,8 @@ import ChatUploadPreview from './chat-upload-preview';
 import type { Attachment } from 'soapbox/types/entities';
 
 interface IChatUpload {
-  attachment: Attachment,
-  onDelete?(): void,
+  attachment: Attachment
+  onDelete?(): void
 }
 
 /** An attachment uploaded to the chat composer, before sending. */
@@ -26,7 +26,7 @@ const ChatUpload: React.FC<IChatUpload> = ({ attachment, onDelete }) => {
   };
 
   return (
-    <div className='relative isolate inline-block h-24 w-24 overflow-hidden rounded-lg bg-gray-200 dark:bg-primary-900'>
+    <div className='dark:bg-primary-900 relative isolate inline-block h-24 w-24 overflow-hidden rounded-lg bg-gray-200'>
       <Blurhash hash={attachment.blurhash} className='absolute inset-0 -z-10 h-full w-full' />
 
       <div className='absolute right-[6px] top-[6px]'>
@@ -53,7 +53,7 @@ const RemoveButton: React.FC<IRemoveButton> = ({ onClick }) => {
     <button
       type='button'
       onClick={onClick}
-      className='flex h-5 w-5 items-center justify-center rounded-full bg-secondary-500 p-1'
+      className='bg-secondary-500 flex h-5 w-5 items-center justify-center rounded-full p-1'
     >
       <Icon
         className='h-3 w-3 text-white'

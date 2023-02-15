@@ -75,7 +75,7 @@ const messages = defineMessages({
 });
 
 interface IHeader {
-  account?: Account,
+  account?: Account
 }
 
 const Header: React.FC<IHeader> = ({ account }) => {
@@ -565,7 +565,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
           title={intl.formatMessage(messages.chat, { name: account.username })}
           theme='outlined'
           className='px-2'
-          iconClassName='w-4 h-4'
+          iconClassName='h-4 w-4'
           disabled={createAndNavigateToChat.isLoading}
         />
       );
@@ -577,7 +577,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
           title={intl.formatMessage(messages.chat, { name: account.username })}
           theme='outlined'
           className='px-2'
-          iconClassName='w-4 h-4'
+          iconClassName='h-4 w-4'
         />
       );
     } else {
@@ -599,7 +599,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
         title={intl.formatMessage(messages.share, { name: account.username })}
         theme='outlined'
         className='px-2'
-        iconClassName='w-4 h-4'
+        iconClassName='h-4 w-4'
       />
     );
   };
@@ -632,12 +632,12 @@ const Header: React.FC<IHeader> = ({ account }) => {
               <Avatar
                 src={account.avatar}
                 size={96}
-                className='relative h-24 w-24 rounded-full bg-white ring-4 ring-white dark:bg-primary-900 dark:ring-primary-900'
+                className='dark:bg-primary-900 dark:ring-primary-900 relative h-24 w-24 rounded-full bg-white ring-4 ring-white'
               />
             </a>
             {account.verified && (
               <div className='absolute bottom-0 right-0'>
-                <VerificationBadge className='h-6 w-6 rounded-full bg-white ring-2 ring-white dark:bg-primary-900 dark:ring-primary-900' />
+                <VerificationBadge className='dark:bg-primary-900 dark:ring-primary-900 h-6 w-6 rounded-full bg-white ring-2 ring-white' />
               </div>
             )}
           </div>
@@ -654,7 +654,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
                     src={require('@tabler/icons/dots.svg')}
                     theme='outlined'
                     className='px-2'
-                    iconClassName='w-4 h-4'
+                    iconClassName='h-4 w-4'
                     children={null}
                   />
                 </DropdownMenu>

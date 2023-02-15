@@ -16,11 +16,11 @@ const RadioGroup = ({ onChange, children }: IRadioGroup) => {
 };
 
 interface IRadioItem {
-  label: React.ReactNode,
-  hint?: React.ReactNode,
-  value: string,
-  checked: boolean,
-  onChange?: React.ChangeEventHandler,
+  label: React.ReactNode
+  hint?: React.ReactNode
+  value: string
+  checked: boolean
+  onChange?: React.ChangeEventHandler
 }
 
 const RadioItem: React.FC<IRadioItem> = ({ label, hint, checked = false, onChange, value }) => {
@@ -31,7 +31,7 @@ const RadioItem: React.FC<IRadioItem> = ({ label, hint, checked = false, onChang
         checked={checked}
         onChange={onChange}
         value={value}
-        className='h-4 w-4 border-gray-300 text-primary-600 focus:ring-primary-500'
+        className='text-primary-600 focus:ring-primary-500 h-4 w-4 border-gray-300'
       />
     </ListItem>
   );

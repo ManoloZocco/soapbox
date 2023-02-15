@@ -12,7 +12,7 @@ import ChatPageSidebar from './components/chat-page-sidebar';
 import Welcome from './components/welcome';
 
 interface IChatPage {
-  chatId?: string,
+  chatId?: string
 }
 
 const ChatPage: React.FC<IChatPage> = ({ chatId }) => {
@@ -60,7 +60,7 @@ const ChatPage: React.FC<IChatPage> = ({ chatId }) => {
     <div
       ref={containerRef}
       style={{ height }}
-      className='h-screen overflow-hidden bg-white text-gray-900 shadow-lg dark:bg-primary-900 dark:text-gray-100 dark:shadow-none sm:rounded-t-xl'
+      className='dark:bg-primary-900 h-screen overflow-hidden bg-white text-gray-900 shadow-lg dark:text-gray-100 dark:shadow-none sm:rounded-t-xl'
     >
       {isOnboarded ? (
         <div
