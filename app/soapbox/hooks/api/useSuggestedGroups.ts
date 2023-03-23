@@ -2,8 +2,8 @@ import { Entities } from 'soapbox/entity-store/entities';
 import { useEntities } from 'soapbox/entity-store/hooks';
 import { Group, groupSchema } from 'soapbox/schemas';
 
+import { useGroupRelationships } from '../api/groups/useGroups';
 import { useFeatures } from '../useFeatures';
-import { useGroupRelationships } from '../useGroups';
 
 function useSuggestedGroups() {
   const features = useFeatures();
