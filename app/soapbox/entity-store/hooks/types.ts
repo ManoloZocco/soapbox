@@ -27,7 +27,7 @@ type EntityPath = [entityType: string, entityId: string]
 
 /** Callback functions for entity actions. */
 interface EntityCallbacks<Value, Error = unknown> {
-  onSuccess?(value: Value): void
+  onSuccess?(value?: Value): void
   onError?(error: Error): void
 }
 
