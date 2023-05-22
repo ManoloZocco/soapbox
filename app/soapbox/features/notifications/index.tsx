@@ -17,6 +17,7 @@ import ScrollableList from 'soapbox/components/scrollable-list';
 import { Column } from 'soapbox/components/ui';
 import PlaceholderNotification from 'soapbox/features/placeholder/components/placeholder-notification';
 import { useAppDispatch, useAppSelector, useSettings } from 'soapbox/hooks';
+import { NOTIFICATION_TYPES, type NotificationType } from 'soapbox/utils/notification';
 
 import FilterBar from './components/filter-bar';
 import Notification from './components/notification';
@@ -42,7 +43,11 @@ const getNotifications = createSelector([
     // we need to turn it off for FilterBar in order not to block ourselves from seeing a specific category
     return notifications.filterNot(item => item !== null && excludedTypes.includes(item.get('type')));
   }
-  return notifications.filter(item => item !== null && allowedType === item.get('type'));
+  const types = NOTIFICATION_TYPES
+    .filter((notificationType) => notificationType.context === allowedType)
+    .map((notificationType) => notificationType.type);
+
+  return notifications.filter(item => item !== null && types.includes(item.get('type') as NotificationType));
 });
 
 const Notifications = () => {
@@ -159,6 +164,7 @@ const Notifications = () => {
       showLoading={isLoading && notifications.size === 0}
       hasMore={hasMore}
       emptyMessage={emptyMessage}
+      emptyMessageCard={false}
       placeholderComponent={PlaceholderNotification}
       placeholderCount={20}
       onLoadMore={handleLoadOlder}

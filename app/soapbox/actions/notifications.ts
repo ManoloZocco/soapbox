@@ -99,7 +99,7 @@ const updateNotificationsQueue = (notification: APIEntity, intlMessages: Record<
 
     const isOnNotificationsPage = curPath === '/notifications';
 
-    if (['mention', 'status'].includes(notification.type)) {
+    if (['mention', 'status', 'group_mention'].includes(notification.type)) {
       const regex = regexFromFilters(filters);
       const searchIndex = notification.status.spoiler_text + '\n' + unescapeHTML(notification.status.content);
       filtered = regex && regex.test(searchIndex);
@@ -170,7 +170,9 @@ const dequeueNotifications = () =>
   };
 
 const excludeTypesFromFilter = (filter: string) => {
-  return NOTIFICATION_TYPES.filter(item => item !== filter);
+  return NOTIFICATION_TYPES
+    .filter((notificationType) => notificationType.context !== filter)
+    .map((notificationType) => notificationType.type);
 };
 
 const noOp = () => new Promise(f => f(undefined));
@@ -196,7 +198,9 @@ const expandNotifications = ({ maxId }: Record<string, any> = {}, done: () => an
 
     if (activeFilter === 'all') {
       if (features.notificationsIncludeTypes) {
-        params.types = NOTIFICATION_TYPES.filter(type => !EXCLUDE_TYPES.includes(type as any));
+        params.types = NOTIFICATION_TYPES
+          .map((notificationType) => notificationType.type)
+          .filter(type => !EXCLUDE_TYPES.includes(type as any));
       } else {
         params.exclude_types = EXCLUDE_TYPES;
       }

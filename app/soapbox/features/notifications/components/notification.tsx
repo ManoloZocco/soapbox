@@ -42,6 +42,7 @@ const icons: Record<NotificationType, string> = {
   follow: require('@tabler/icons/user-plus.svg'),
   follow_request: require('@tabler/icons/user-plus.svg'),
   mention: require('@tabler/icons/at.svg'),
+  group_mention: require('@tabler/icons/at.svg'),
   favourite: require('@tabler/icons/heart.svg'),
   group_favourite: require('@tabler/icons/heart.svg'),
   reblog: require('@tabler/icons/repeat.svg'),
@@ -73,6 +74,10 @@ const messages: Record<NotificationType, MessageDescriptor> = defineMessages({
     defaultMessage: '{name} has requested to follow you',
   },
   mention: {
+    id: 'notification.mentioned',
+    defaultMessage: '{name} mentioned you',
+  },
+  group_mention: {
     id: 'notification.mentioned',
     defaultMessage: '{name} mentioned you',
   },
@@ -326,6 +331,7 @@ const Notification: React.FC<INotificaton> = (props) => {
       case 'favourite':
       case 'group_favourite':
       case 'mention':
+      case 'group_mention':
       case 'reblog':
       case 'group_reblog':
       case 'status':
