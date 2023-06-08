@@ -14,6 +14,7 @@ import { initMuteModal } from 'soapbox/actions/mutes';
 import { initReport, ReportableEntities } from 'soapbox/actions/reports';
 import { deleteStatus, editStatus, toggleMuteStatus } from 'soapbox/actions/statuses';
 import { deleteFromTimelines } from 'soapbox/actions/timelines';
+import { useGroup, useMuteGroup, useUnmuteGroup } from 'soapbox/api/hooks';
 import { useDeleteGroupStatus } from 'soapbox/api/hooks/groups/useDeleteGroupStatus';
 import DropdownMenu from 'soapbox/components/dropdown-menu';
 import StatusActionButton from 'soapbox/components/status-action-button';
@@ -32,64 +33,71 @@ import type { Menu } from 'soapbox/components/dropdown-menu';
 import type { Account, Group, Status } from 'soapbox/types/entities';
 
 const messages = defineMessages({
-  delete: { id: 'status.delete', defaultMessage: 'Delete' },
-  redraft: { id: 'status.redraft', defaultMessage: 'Delete & re-draft' },
-  edit: { id: 'status.edit', defaultMessage: 'Edit' },
-  direct: { id: 'status.direct', defaultMessage: 'Direct message @{name}' },
-  chat: { id: 'status.chat', defaultMessage: 'Chat with @{name}' },
-  mention: { id: 'status.mention', defaultMessage: 'Mention @{name}' },
-  mute: { id: 'account.mute', defaultMessage: 'Mute @{name}' },
-  block: { id: 'account.block', defaultMessage: 'Block @{name}' },
-  reply: { id: 'status.reply', defaultMessage: 'Reply' },
-  share: { id: 'status.share', defaultMessage: 'Share' },
-  more: { id: 'status.more', defaultMessage: 'More' },
-  replyAll: { id: 'status.replyAll', defaultMessage: 'Reply to thread' },
-  reblog: { id: 'status.reblog', defaultMessage: 'Repost' },
-  reblog_private: { id: 'status.reblog_private', defaultMessage: 'Repost to original audience' },
-  cancel_reblog_private: { id: 'status.cancel_reblog_private', defaultMessage: 'Un-repost' },
-  cannot_reblog: { id: 'status.cannot_reblog', defaultMessage: 'This post cannot be reposted' },
-  favourite: { id: 'status.favourite', defaultMessage: 'Like' },
-  disfavourite: { id: 'status.disfavourite', defaultMessage: 'Disike' },
-  open: { id: 'status.open', defaultMessage: 'Expand this post' },
-  bookmark: { id: 'status.bookmark', defaultMessage: 'Bookmark' },
-  unbookmark: { id: 'status.unbookmark', defaultMessage: 'Remove bookmark' },
-  report: { id: 'status.report', defaultMessage: 'Report @{name}' },
-  muteConversation: { id: 'status.mute_conversation', defaultMessage: 'Mute conversation' },
-  unmuteConversation: { id: 'status.unmute_conversation', defaultMessage: 'Unmute conversation' },
-  pin: { id: 'status.pin', defaultMessage: 'Pin on profile' },
-  unpin: { id: 'status.unpin', defaultMessage: 'Unpin from profile' },
-  embed: { id: 'status.embed', defaultMessage: 'Embed' },
   adminAccount: { id: 'status.admin_account', defaultMessage: 'Moderate @{name}' },
   admin_status: { id: 'status.admin_status', defaultMessage: 'Open this post in the moderation interface' },
+  block: { id: 'account.block', defaultMessage: 'Block @{name}' },
+  blockAndReport: { id: 'confirmations.block.block_and_report', defaultMessage: 'Block & Report' },
+  blockConfirm: { id: 'confirmations.block.confirm', defaultMessage: 'Block' },
+  bookmark: { id: 'status.bookmark', defaultMessage: 'Bookmark' },
+  cancel_reblog_private: { id: 'status.cancel_reblog_private', defaultMessage: 'Un-repost' },
+  cannot_reblog: { id: 'status.cannot_reblog', defaultMessage: 'This post cannot be reposted' },
+  chat: { id: 'status.chat', defaultMessage: 'Chat with @{name}' },
   copy: { id: 'status.copy', defaultMessage: 'Copy link to post' },
-  group_remove_account: { id: 'status.remove_account_from_group', defaultMessage: 'Remove account from group' },
-  group_remove_post: { id: 'status.remove_post_from_group', defaultMessage: 'Remove post from group' },
-  external: { id: 'status.external', defaultMessage: 'View post on {domain}' },
   deactivateUser: { id: 'admin.users.actions.deactivate_user', defaultMessage: 'Deactivate @{name}' },
-  deleteUser: { id: 'admin.users.actions.delete_user', defaultMessage: 'Delete @{name}' },
-  deleteStatus: { id: 'admin.statuses.actions.delete_status', defaultMessage: 'Delete post' },
-  markStatusSensitive: { id: 'admin.statuses.actions.mark_status_sensitive', defaultMessage: 'Mark post sensitive' },
-  markStatusNotSensitive: { id: 'admin.statuses.actions.mark_status_not_sensitive', defaultMessage: 'Mark post not sensitive' },
-  reactionLike: { id: 'status.reactions.like', defaultMessage: 'Like' },
-  reactionHeart: { id: 'status.reactions.heart', defaultMessage: 'Love' },
-  reactionLaughing: { id: 'status.reactions.laughing', defaultMessage: 'Haha' },
-  reactionOpenMouth: { id: 'status.reactions.open_mouth', defaultMessage: 'Wow' },
-  reactionCry: { id: 'status.reactions.cry', defaultMessage: 'Sad' },
-  reactionWeary: { id: 'status.reactions.weary', defaultMessage: 'Weary' },
-  quotePost: { id: 'status.quote', defaultMessage: 'Quote post' },
+  delete: { id: 'status.delete', defaultMessage: 'Delete' },
   deleteConfirm: { id: 'confirmations.delete.confirm', defaultMessage: 'Delete' },
+  deleteFromGroupMessage: { id: 'confirmations.delete_from_group.message', defaultMessage: 'Are you sure you want to delete @{name}\'s post?' },
   deleteHeading: { id: 'confirmations.delete.heading', defaultMessage: 'Delete post' },
   deleteMessage: { id: 'confirmations.delete.message', defaultMessage: 'Are you sure you want to delete this post?' },
-  redraftConfirm: { id: 'confirmations.redraft.confirm', defaultMessage: 'Delete & redraft' },
-  redraftMessage: { id: 'confirmations.redraft.message', defaultMessage: 'Are you sure you want to delete this post and re-draft it? Favorites and reposts will be lost, and replies to the original post will be orphaned.' },
-  blockConfirm: { id: 'confirmations.block.confirm', defaultMessage: 'Block' },
-  replyConfirm: { id: 'confirmations.reply.confirm', defaultMessage: 'Reply' },
-  redraftHeading: { id: 'confirmations.redraft.heading', defaultMessage: 'Delete & redraft' },
-  replyMessage: { id: 'confirmations.reply.message', defaultMessage: 'Replying now will overwrite the message you are currently composing. Are you sure you want to proceed?' },
-  blockAndReport: { id: 'confirmations.block.block_and_report', defaultMessage: 'Block & Report' },
-  replies_disabled_group: { id: 'status.disabled_replies.group_membership', defaultMessage: 'Only group members can reply' },
+  deleteStatus: { id: 'admin.statuses.actions.delete_status', defaultMessage: 'Delete post' },
+  deleteUser: { id: 'admin.users.actions.delete_user', defaultMessage: 'Delete @{name}' },
+  direct: { id: 'status.direct', defaultMessage: 'Direct message @{name}' },
+  disfavourite: { id: 'status.disfavourite', defaultMessage: 'Disike' },
+  edit: { id: 'status.edit', defaultMessage: 'Edit' },
+  embed: { id: 'status.embed', defaultMessage: 'Embed' },
+  external: { id: 'status.external', defaultMessage: 'View post on {domain}' },
+  favourite: { id: 'status.favourite', defaultMessage: 'Like' },
   groupModDelete: { id: 'status.group_mod_delete', defaultMessage: 'Delete post from group' },
-  deleteFromGroupMessage: { id: 'confirmations.delete_from_group.message', defaultMessage: 'Are you sure you want to delete @{name}\'s post?' },
+  group_remove_account: { id: 'status.remove_account_from_group', defaultMessage: 'Remove account from group' },
+  group_remove_post: { id: 'status.remove_post_from_group', defaultMessage: 'Remove post from group' },
+  markStatusNotSensitive: { id: 'admin.statuses.actions.mark_status_not_sensitive', defaultMessage: 'Mark post not sensitive' },
+  markStatusSensitive: { id: 'admin.statuses.actions.mark_status_sensitive', defaultMessage: 'Mark post sensitive' },
+  mention: { id: 'status.mention', defaultMessage: 'Mention @{name}' },
+  more: { id: 'status.more', defaultMessage: 'More' },
+  mute: { id: 'account.mute', defaultMessage: 'Mute @{name}' },
+  muteConfirm: { id: 'confirmations.mute_group.confirm', defaultMessage: 'Mute' },
+  muteConversation: { id: 'status.mute_conversation', defaultMessage: 'Mute conversation' },
+  muteGroup: { id: 'group.mute.long_label', defaultMessage: 'Mute Group' },
+  muteHeading: { id: 'confirmations.mute_group.heading', defaultMessage: 'Mute Group' },
+  muteMessage: { id: 'confirmations.mute_group.message', defaultMessage: 'You are about to mute the group. Do you want to continue?' },
+  muteSuccess: { id: 'group.mute.success', defaultMessage: 'Muted the group' },
+  open: { id: 'status.open', defaultMessage: 'Expand this post' },
+  pin: { id: 'status.pin', defaultMessage: 'Pin on profile' },
+  quotePost: { id: 'status.quote', defaultMessage: 'Quote post' },
+  reactionCry: { id: 'status.reactions.cry', defaultMessage: 'Sad' },
+  reactionHeart: { id: 'status.reactions.heart', defaultMessage: 'Love' },
+  reactionLaughing: { id: 'status.reactions.laughing', defaultMessage: 'Haha' },
+  reactionLike: { id: 'status.reactions.like', defaultMessage: 'Like' },
+  reactionOpenMouth: { id: 'status.reactions.open_mouth', defaultMessage: 'Wow' },
+  reactionWeary: { id: 'status.reactions.weary', defaultMessage: 'Weary' },
+  reblog: { id: 'status.reblog', defaultMessage: 'Repost' },
+  reblog_private: { id: 'status.reblog_private', defaultMessage: 'Repost to original audience' },
+  redraft: { id: 'status.redraft', defaultMessage: 'Delete & re-draft' },
+  redraftConfirm: { id: 'confirmations.redraft.confirm', defaultMessage: 'Delete & redraft' },
+  redraftHeading: { id: 'confirmations.redraft.heading', defaultMessage: 'Delete & redraft' },
+  redraftMessage: { id: 'confirmations.redraft.message', defaultMessage: 'Are you sure you want to delete this post and re-draft it? Favorites and reposts will be lost, and replies to the original post will be orphaned.' },
+  replies_disabled_group: { id: 'status.disabled_replies.group_membership', defaultMessage: 'Only group members can reply' },
+  reply: { id: 'status.reply', defaultMessage: 'Reply' },
+  replyAll: { id: 'status.replyAll', defaultMessage: 'Reply to thread' },
+  replyConfirm: { id: 'confirmations.reply.confirm', defaultMessage: 'Reply' },
+  replyMessage: { id: 'confirmations.reply.message', defaultMessage: 'Replying now will overwrite the message you are currently composing. Are you sure you want to proceed?' },
+  report: { id: 'status.report', defaultMessage: 'Report @{name}' },
+  share: { id: 'status.share', defaultMessage: 'Share' },
+  unbookmark: { id: 'status.unbookmark', defaultMessage: 'Remove bookmark' },
+  unmuteConversation: { id: 'status.unmute_conversation', defaultMessage: 'Unmute conversation' },
+  unmuteGroup: { id: 'group.unmute.long_label', defaultMessage: 'Unmute Group' },
+  unmuteSuccess: { id: 'group.unmute.success', defaultMessage: 'Unmuted the group' },
+  unpin: { id: 'status.unpin', defaultMessage: 'Unpin from profile' },
 });
 
 interface IStatusActionBar {
@@ -110,6 +118,12 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
   const intl = useIntl();
   const history = useHistory();
   const dispatch = useAppDispatch();
+
+
+  const { group } = useGroup((status.group as Group)?.id as string);
+  const muteGroup = useMuteGroup(group as Group);
+  const unmuteGroup = useUnmuteGroup(group as Group);
+  const isMutingGroup = !!group?.relationship?.muting;
 
   const me = useAppSelector(state => state.me);
   const groupRelationship = useAppSelector(state => status.group ? state.group_relationships.get((status.group as Group).id) : null);
@@ -247,6 +261,27 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
 
   const handleMuteClick: React.EventHandler<React.MouseEvent> = (e) => {
     dispatch(initMuteModal(status.account as Account));
+  };
+
+  const handleMuteGroupClick: React.EventHandler<React.MouseEvent> = () =>
+    dispatch(openModal('CONFIRM', {
+      heading: intl.formatMessage(messages.muteHeading),
+      message: intl.formatMessage(messages.muteMessage),
+      confirm: intl.formatMessage(messages.muteConfirm),
+      confirmationTheme: 'primary',
+      onConfirm: () => muteGroup.mutate(undefined, {
+        onSuccess() {
+          toast.success(intl.formatMessage(messages.muteSuccess));
+        },
+      }),
+    }));
+
+  const handleUnmuteGroupClick: React.EventHandler<React.MouseEvent> = () => {
+    unmuteGroup.mutate(undefined, {
+      onSuccess() {
+        toast.success(intl.formatMessage(messages.unmuteSuccess));
+      },
+    });
   };
 
   const handleBlockClick: React.EventHandler<React.MouseEvent> = (e) => {
@@ -443,6 +478,15 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
       }
 
       menu.push(null);
+      if (features.groupsMuting && status.group) {
+        menu.push({
+          text: isMutingGroup ? intl.formatMessage(messages.unmuteGroup) : intl.formatMessage(messages.muteGroup),
+          icon: require('@tabler/icons/volume-3.svg'),
+          action: isMutingGroup ? handleUnmuteGroupClick : handleMuteGroupClick,
+        });
+        menu.push(null);
+      }
+
       menu.push({
         text: intl.formatMessage(messages.mute, { name: username }),
         action: handleMuteClick,
