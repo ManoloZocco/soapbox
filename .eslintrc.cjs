@@ -27,6 +27,7 @@ module.exports = {
     'promise',
     'react-hooks',
     '@typescript-eslint',
+    'formatjs',
   ],
 
   parserOptions: {
@@ -272,6 +273,10 @@ module.exports = {
       },
     ],
     'tailwindcss/migration-from-tailwind-2': 'error',
+
+    'formatjs/enforce-default-message': 'error',
+    'formatjs/enforce-id': 'error',
+    'formatjs/no-literal-string-in-jsx': 'warn',
   },
   overrides: [
     {
@@ -298,6 +303,12 @@ module.exports = {
             MethodDefinition: true,
           },
         }],
+      },
+    },
+    {
+      files: ['**/*.test.ts', '**/*.test.tsx'],
+      rules: {
+        'formatjs/no-literal-string-in-jsx': 'off',
       },
     },
   ],

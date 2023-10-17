@@ -70,7 +70,7 @@ const Directory = () => {
           {features.federating && (
             <div>
               <Text weight='medium'>
-                <FormattedMessage id='directory.fediverse_filter' defaultMessage='Fediverse filter' />v
+                <FormattedMessage id='directory.fediverse_filter' defaultMessage='Fediverse filter' />
               </Text>
               <fieldset className='mt-3'>
                 <legend className='sr-only'>

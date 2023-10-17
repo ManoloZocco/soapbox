@@ -1194,6 +1194,7 @@
   "register_invite.lead": "Complete the form below to create an account.",
   "register_invite.title": "You've been invited to join {siteTitle}!",
   "registration.agreement": "I agree to the {tos}.",
+  "registration.captcha": "Captcha",
   "registration.captcha.hint": "Click the image to get a new captcha",
   "registration.captcha.placeholder": "Enter the pictured text",
   "registration.closed_message": "{instance} is not accepting new members",
