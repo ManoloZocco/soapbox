@@ -1468,7 +1468,7 @@
   "tabs_bar.search": "Cerca",
   "tabs_bar.settings": "Impostazioni",
   "textarea.counter.label": "rimangono {count} caratteri",
-  "theme_editor.Reset": "Cancella",
+  "theme_editor.reset": "Cancella",
   "theme_editor.export": "Esporta il tema",
   "theme_editor.import": "Importa tema",
   "theme_editor.import_success": "Hai importato il tema!",

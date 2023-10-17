@@ -1461,7 +1461,7 @@
   "tabs_bar.search": "Szukaj",
   "tabs_bar.settings": "Ustawienia",
   "textarea.counter.label": "Pozostało {count} znaków",
-  "theme_editor.Reset": "Resetuj",
+  "theme_editor.reset": "Resetuj",
   "theme_editor.export": "Eksportuj motyw",
   "theme_editor.import": "Importuj motyw",
   "theme_editor.import_success": "Pomyślnie zaimportowano motyw!",

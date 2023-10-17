@@ -1464,7 +1464,7 @@
   "tabs_bar.search": "Ara",
   "tabs_bar.settings": "Ayarlar",
   "textarea.counter.label": "{count} karakter kaldı",
-  "theme_editor.Reset": "Sıfırla",
+  "theme_editor.reset": "Sıfırla",
   "theme_editor.export": "Temayı dışa aktar",
   "theme_editor.import": "Temayı içe aktar",
   "theme_editor.import_success": "Tema başarıyla içe aktarıldı!",

@@ -1468,7 +1468,7 @@
   "tabs_bar.search": "Поиск",
   "tabs_bar.settings": "Settings",
   "textarea.counter.label": "осталось {count} символов",
-  "theme_editor.Reset": "Сбросить",
+  "theme_editor.reset": "Сбросить",
   "theme_editor.export": "Экспортировать тему",
   "theme_editor.import": "Импортировать тему",
   "theme_editor.import_success": "Тема была успешно импортирована!",

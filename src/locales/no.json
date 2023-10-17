@@ -1402,7 +1402,7 @@
   "tabs_bar.search": "Søk",
   "tabs_bar.settings": "Innstillinger",
   "textarea.counter.label": "{count} tegn gjenstår",
-  "theme_editor.Reset": "Tilbakestill",
+  "theme_editor.reset": "Tilbakestill",
   "theme_editor.export": "Eksporter tema",
   "theme_editor.import": "Importer tema",
   "theme_editor.import_success": "Temaet ble importert!",

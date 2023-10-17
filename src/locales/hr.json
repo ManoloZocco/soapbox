@@ -1198,7 +1198,7 @@
   "tabs_bar.profile": "Profil",
   "tabs_bar.search": "Pretraživanje",
   "tabs_bar.settings": "Postavke",
-  "theme_editor.Reset": "Resetiraj",
+  "theme_editor.reset": "Resetiraj",
   "theme_editor.export": "Izvezi temu",
   "theme_editor.import": "Uvezi temu",
   "theme_editor.import_success": "Tema je uspješno uvezena!",

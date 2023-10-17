@@ -1377,7 +1377,7 @@
   "tabs_bar.profile": "Profile",
   "tabs_bar.search": "Buscar",
   "tabs_bar.settings": "Settings",
-  "theme_editor.Reset": "Restablecer",
+  "theme_editor.reset": "Restablecer",
   "theme_editor.export": "Exportar tema",
   "theme_editor.import": "Importar tema",
   "theme_editor.import_success": "¡Tema importado con éxito!",
