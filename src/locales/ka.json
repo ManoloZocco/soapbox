@@ -335,7 +335,7 @@
   "status.reblogged_by": "{name} დაიბუსტა",
   "status.redraft": "გაუქმდეს და გადანაწილდეს",
   "status.reply": "პასუხი",
-  "status.replyAll": "უპასუხე თემას",
+  "status.reply_all": "უპასუხე თემას",
   "status.report": "დაარეპორტე @{name}",
   "status.sensitive_warning": "მგრძნობიარე კონტენტი",
   "status.share": "გაზიარება",

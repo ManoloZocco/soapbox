@@ -373,7 +373,7 @@
   "status.reblogs.empty": "Does neb wedi bŵstio'r tŵt yma eto. Pan y bydd rhywun yn gwneud, byddent yn ymddangos yma.",
   "status.redraft": "Dileu & ailddrafftio",
   "status.reply": "Ateb",
-  "status.replyAll": "Ateb i edefyn",
+  "status.reply_all": "Ateb i edefyn",
   "status.report": "Adrodd @{name}",
   "status.sensitive_warning": "Cynnwys sensitif",
   "status.share": "Rhannu",
