@@ -4,6 +4,7 @@ import { Map as ImmutableMap, List as ImmutableList, fromJS } from 'immutable';
 import { ADMIN_CONFIG_UPDATE_REQUEST, ADMIN_CONFIG_UPDATE_SUCCESS } from 'soapbox/actions/admin';
 import { PLEROMA_PRELOAD_IMPORT } from 'soapbox/actions/preload';
 import { type Instance, instanceSchema } from 'soapbox/schemas';
+import { instanceV1ToV2 } from 'soapbox/schemas/instance';
 import KVStore from 'soapbox/storage/kv-store';
 import { ConfigDB } from 'soapbox/utils/config-db';
 
@@ -13,11 +14,13 @@ import {
 } from '../actions/instance';
 
 import type { AnyAction } from 'redux';
+import type { APIEntity } from 'soapbox/types/entities';
 
 const initialState: Instance = instanceSchema.parse({});
 
-const importInstance = (_state: typeof initialState, instance: unknown) => {
-  return instanceSchema.parse(instance);
+const importInstance = (_state: typeof initialState, instance: APIEntity) => {
+  if (instance.domain) return instanceSchema.parse(instance);
+  return instanceV1ToV2(instance);
 };
 
 const preloadImport = (state: typeof initialState, action: Record<string, any>, path: string) => {
@@ -45,8 +48,10 @@ const importConfigs = (state: typeof initialState, configs: ImmutableList<any>) 
       const registrationsOpen = getConfigValue(value, ':registrations_open') as boolean | undefined;
       const approvalRequired = getConfigValue(value, ':account_approval_required') as boolean | undefined;
 
-      draft.registrations = registrationsOpen ?? draft.registrations;
-      draft.approval_required = approvalRequired ?? draft.approval_required;
+      draft.registrations = {
+        enabled: registrationsOpen ?? draft.registrations.enabled,
+        approval_required: approvalRequired ?? draft.registrations.approval_required,
+      };
     }
 
     if (simplePolicy) {
@@ -76,9 +81,7 @@ const getHost = (instance: { uri: string }) => {
   }
 };
 
-const persistInstance = (instance: { uri: string }) => {
-  const host = getHost(instance);
-
+const persistInstance = (instance: { uri: string }, host: string | null = getHost(instance)) => {
   if (host) {
     KVStore.setItem(`instance:${host}`, instance).catch(console.error);
   }
@@ -97,10 +100,10 @@ export default function instance(state = initialState, action: AnyAction) {
     case PLEROMA_PRELOAD_IMPORT:
       return preloadImport(state, action, '/api/v1/instance');
     case rememberInstance.fulfilled.type:
-      return importInstance(state, action.payload);
+      return importInstance(state, action.payload.instance);
     case fetchInstance.fulfilled.type:
       persistInstance(action.payload);
-      return importInstance(state, action.payload);
+      return importInstance(state, action.payload.instance);
     case fetchInstance.rejected.type:
       return handleInstanceFetchFail(state, action.error);
     case ADMIN_CONFIG_UPDATE_REQUEST:
