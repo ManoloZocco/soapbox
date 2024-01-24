@@ -55,7 +55,7 @@
     "@fontsource/roboto-mono": "^5.0.0",
     "@fontsource/tajawal": "^5.0.8",
     "@gamestdio/websocket": "^0.3.2",
-    "@lexical/clipboard": "^0.12.4",
+    "@lexical/clipboard": "^0.13.0",
     "@lexical/hashtag": "^0.12.4",
     "@lexical/link": "^0.12.4",
     "@lexical/react": "^0.12.4",
