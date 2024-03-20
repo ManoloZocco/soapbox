@@ -36,6 +36,7 @@ import {
   ReblogsModal,
   ReplyMentionsModal,
   ReportModal,
+  SelectBookmarkFolderModal,
   UnauthorizedModal,
   VideoModal,
 } from 'soapbox/features/ui/util/async-components';
@@ -78,6 +79,7 @@ const MODAL_COMPONENTS: Record<string, React.LazyExoticComponent<any>> = {
   'REBLOGS': ReblogsModal,
   'REPLY_MENTIONS': ReplyMentionsModal,
   'REPORT': ReportModal,
+  'SELECT_BOOKMARK_FOLDER': SelectBookmarkFolderModal,
   'UNAUTHORIZED': UnauthorizedModal,
   'VIDEO': VideoModal,
 };
