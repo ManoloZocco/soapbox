@@ -156,14 +156,14 @@ export default function statusLists(state = initialState, action: AnyAction) {
       return appendToList(state, `favourites:${action.accountId}`, action.statuses, action.next);
     case BOOKMARKED_STATUSES_FETCH_REQUEST:
     case BOOKMARKED_STATUSES_EXPAND_REQUEST:
-      return setLoading(state, 'bookmarks', true);
+      return setLoading(state, action.folderId ? `bookmarks:${action.folderId}` : 'bookmarks', true);
     case BOOKMARKED_STATUSES_FETCH_FAIL:
     case BOOKMARKED_STATUSES_EXPAND_FAIL:
-      return setLoading(state, 'bookmarks', false);
+      return setLoading(state, action.folderId ? `bookmarks:${action.folderId}` : 'bookmarks', false);
     case BOOKMARKED_STATUSES_FETCH_SUCCESS:
-      return normalizeList(state, 'bookmarks', action.statuses, action.next);
+      return normalizeList(state, action.folderId ? `bookmarks:${action.folderId}` : 'bookmarks', action.statuses, action.next);
     case BOOKMARKED_STATUSES_EXPAND_SUCCESS:
-      return appendToList(state, 'bookmarks', action.statuses, action.next);
+      return appendToList(state, action.folderId ? `bookmarks:${action.folderId}` : 'bookmarks', action.statuses, action.next);
     case FAVOURITE_SUCCESS:
       return prependOneToList(state, 'favourites', action.status);
     case UNFAVOURITE_SUCCESS:
