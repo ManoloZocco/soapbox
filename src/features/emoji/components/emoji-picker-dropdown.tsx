@@ -12,6 +12,7 @@ import { buildCustomEmojis } from '../../emoji';
 import { EmojiPicker } from '../../ui/util/async-components';
 
 import type { Emoji, CustomEmoji, NativeEmoji } from 'soapbox/features/emoji';
+import type { Emoji as EmojiMart, CustomEmoji as EmojiMartCustom } from 'soapbox/features/emoji/data';
 
 export const messages = defineMessages({
   emoji: { id: 'emoji_button.label', defaultMessage: 'Insert emoji' },
@@ -44,6 +45,7 @@ export interface IEmojiPickerDropdown {
   onPickEmoji?: (emoji: Emoji) => void;
   condensed?: boolean;
   withCustom?: boolean;
+  customEmojis?: EmojiMart<EmojiMartCustom>[] | undefined;
   visible: boolean;
   setVisible: (value: boolean) => void;
   update: (() => any) | null;
@@ -89,6 +91,13 @@ export const getFrequentlyUsedEmojis = createSelector([
   return emojis;
 });
 
+export function useGetCustomEmojies(customEmojiReacts: boolean) {
+  const appSelector = useAppSelector;
+  return customEmojiReacts
+    ? buildCustomEmojis(appSelector((state) => getCustomEmojis(state)))
+    : undefined;
+}
+
 const getCustomEmojis = createSelector([
   (state: RootState) => state.custom_emojis,
 ], emojis => emojis.filter(e => e.get('visible_in_picker')).sort((a, b) => {
@@ -124,14 +133,15 @@ const RenderAfter = ({ children, update }: any) => {
 };
 
 const EmojiPickerDropdown: React.FC<IEmojiPickerDropdown> = ({
-  onPickEmoji, visible, setVisible, update, withCustom = true,
+  onPickEmoji, visible, setVisible, update, customEmojis, withCustom = true,
 }) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const title = intl.formatMessage(messages.emoji);
   const theme = useTheme();
 
-  const customEmojis = useAppSelector((state) => getCustomEmojis(state));
+  const getCustomEmojis = useGetCustomEmojies;
+  const _customEmojis = customEmojis ? customEmojis : getCustomEmojis(withCustom);
   const frequentlyUsedEmojis = useAppSelector((state) => getFrequentlyUsedEmojis(state));
 
   const handlePick = (emoji: any) => {
@@ -217,7 +227,7 @@ const EmojiPickerDropdown: React.FC<IEmojiPickerDropdown> = ({
       <RenderAfter update={update}>
         <Suspense>
           <EmojiPicker
-            custom={withCustom ? [{ emojis: buildCustomEmojis(customEmojis) }] : undefined}
+            custom={_customEmojis ? [{ emojis: _customEmojis }] : undefined}
             title={title}
             onEmojiSelect={handlePick}
             recent={frequentlyUsedEmojis}
