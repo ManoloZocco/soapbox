@@ -1,6 +1,6 @@
 import { shift, useFloating, Placement, offset, OffsetOptions } from '@floating-ui/react';
 import clsx from 'clsx';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import EmojiComponent from 'soapbox/components/ui/emoji/emoji';
 import HStack from 'soapbox/components/ui/hstack/hstack';
@@ -66,7 +66,11 @@ const EmojiSelector: React.FC<IEmojiSelector> = ({
 
   const [expanded, setExpanded] = useState(false);
 
-  const { x, y, strategy, refs, update } = useFloating<HTMLElement>({
+  const emojiPickerDropdownRef = useRef<HTMLDivElement>(null);
+  const emojiPickerDropdownWidth = emojiPickerDropdownRef.current?.clientWidth || 300;
+  const emojiPickerDropdownHeight = emojiPickerDropdownRef.current?.clientHeight || 435;
+
+  const { x, y, strategy, refs } = useFloating<HTMLElement>({
     placement,
     middleware: [offset(offsetOptions), shift()],
   });
@@ -111,13 +115,23 @@ const EmojiSelector: React.FC<IEmojiSelector> = ({
       }}
     >
       {expanded ? (
-        <EmojiPickerDropdown
-          visible={expanded}
-          setVisible={setExpanded}
-          update={update}
-          withCustom={customEmojiReacts}
-          onPickEmoji={handlePickEmoji}
-        />
+        <div
+          style={{
+            position: 'fixed',
+            top: `calc(50% - ${emojiPickerDropdownHeight / 2}px)`,
+            left: `calc(50% - ${emojiPickerDropdownWidth / 2}px)`,
+            width: `${emojiPickerDropdownWidth}px`,
+            height: `${emojiPickerDropdownHeight}px`,
+          }}
+        >
+          <EmojiPickerDropdown
+            emojiPickerDropdownRef={emojiPickerDropdownRef}
+            visible={expanded}
+            setVisible={setExpanded}
+            withCustom={customEmojiReacts}
+            onPickEmoji={handlePickEmoji}
+          />
+        </div>
       ) : (
         <HStack
           className={clsx('z-[999] flex w-max max-w-[100vw] flex-wrap space-x-3 rounded-full bg-white px-3 py-2.5 shadow-lg focus:outline-none dark:bg-gray-900 dark:ring-2 dark:ring-primary-700')}

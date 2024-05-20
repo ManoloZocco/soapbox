@@ -1,5 +1,5 @@
 import { Map as ImmutableMap } from 'immutable';
-import React, { useEffect, useState, useLayoutEffect, Suspense } from 'react';
+import React, { useEffect, Suspense, RefObject } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { createSelector } from 'reselect';
 
@@ -46,7 +46,7 @@ export interface IEmojiPickerDropdown {
   withCustom?: boolean;
   visible: boolean;
   setVisible: (value: boolean) => void;
-  update: (() => any) | null;
+  emojiPickerDropdownRef: RefObject<HTMLDivElement>;
 }
 
 const perLine = 8;
@@ -104,27 +104,8 @@ const getCustomEmojis = createSelector([
   }
 }));
 
-// Fixes render bug where popover has a delayed position update
-const RenderAfter = ({ children, update }: any) => {
-  const [nextTick, setNextTick] = useState(false);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setNextTick(true);
-    }, 0);
-  }, []);
-
-  useLayoutEffect(() => {
-    if (nextTick) {
-      update();
-    }
-  }, [nextTick, update]);
-
-  return nextTick ? children : null;
-};
-
 const EmojiPickerDropdown: React.FC<IEmojiPickerDropdown> = ({
-  onPickEmoji, visible, setVisible, update, withCustom = true,
+  onPickEmoji, visible, setVisible, withCustom = true, emojiPickerDropdownRef,
 }) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
@@ -214,25 +195,24 @@ const EmojiPickerDropdown: React.FC<IEmojiPickerDropdown> = ({
 
   return (
     visible ? (
-      <RenderAfter update={update}>
-        <Suspense>
-          <EmojiPicker
-            custom={withCustom ? [{ emojis: buildCustomEmojis(customEmojis) }] : undefined}
-            title={title}
-            onEmojiSelect={handlePick}
-            recent={frequentlyUsedEmojis}
-            perLine={8}
-            skin={handleSkinTone}
-            emojiSize={22}
-            emojiButtonSize={34}
-            set='twitter'
-            theme={theme}
-            i18n={getI18n()}
-            skinTonePosition='search'
-            previewPosition='none'
-          />
-        </Suspense>
-      </RenderAfter>
+      <Suspense>
+        <EmojiPicker
+          emojiPickerDropdownRef={emojiPickerDropdownRef}
+          custom={withCustom ? [{ emojis: buildCustomEmojis(customEmojis) }] : undefined}
+          title={title}
+          onEmojiSelect={handlePick}
+          recent={frequentlyUsedEmojis}
+          perLine={8}
+          skin={handleSkinTone}
+          emojiSize={22}
+          emojiButtonSize={34}
+          set='twitter'
+          theme={theme}
+          i18n={getI18n()}
+          skinTonePosition='search'
+          previewPosition='none'
+        />
+      </Suspense>
     ) : null
   );
 };

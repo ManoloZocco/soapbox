@@ -1,6 +1,6 @@
-import { useFloating, shift } from '@floating-ui/react';
+import { ExtendedRefs } from '@floating-ui/react';
 import clsx from 'clsx';
-import React, { KeyboardEvent, useState } from 'react';
+import React, { KeyboardEvent, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { defineMessages, useIntl } from 'react-intl';
 
@@ -20,11 +20,14 @@ const EmojiPickerDropdownContainer = (
   const title = intl.formatMessage(messages.emoji);
   const [visible, setVisible] = useState(false);
 
-  const { x, y, strategy, refs, update } = useFloating<HTMLButtonElement>({
-    middleware: [shift()],
-  });
+  const refs = {
+    floating: useRef<HTMLDivElement>(null),
+    reference: useRef<HTMLButtonElement>(null),
+  };
+  const emojiPickerDropdownWidth = refs.floating.current?.clientWidth || 300;
+  const emojiPickerDropdownHeight = refs.floating.current?.clientHeight || 435;
 
-  useClickOutside(refs, () => {
+  useClickOutside(refs as ExtendedRefs<HTMLDivElement | HTMLButtonElement>, () => {
     setVisible(false);
   });
 
@@ -39,7 +42,7 @@ const EmojiPickerDropdownContainer = (
         className={clsx({
           'text-gray-600 hover:text-gray-700 dark:hover:text-gray-500': true,
         })}
-        ref={refs.setReference}
+        ref={refs.reference}
         src={require('@tabler/icons/outline/mood-happy.svg')}
         title={title}
         aria-label={title}
@@ -53,18 +56,18 @@ const EmojiPickerDropdownContainer = (
       {createPortal(
         <div
           className='z-[101]'
-          ref={refs.setFloating}
-          style={{
-            position: strategy,
-            top: y ?? 0,
-            left: x ?? 0,
-            width: 'max-content',
-          }}
+          style={visible ? {
+            top: `calc(50% - ${emojiPickerDropdownHeight / 2}px)`,
+            left: `calc(50% - ${emojiPickerDropdownWidth / 2}px)`,
+            position: 'fixed',
+            width: `${emojiPickerDropdownWidth}px`,
+            height: `${emojiPickerDropdownHeight}px`,
+          } : {}}
         >
           <EmojiPickerDropdown
+            emojiPickerDropdownRef={refs.floating}
             visible={visible}
             setVisible={setVisible}
-            update={update}
             {...props}
           />
         </div>,
