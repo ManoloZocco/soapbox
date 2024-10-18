@@ -5,34 +5,50 @@ import React, { useEffect, useState } from 'react';
 import EmojiComponent from 'soapbox/components/ui/emoji/emoji';
 import HStack from 'soapbox/components/ui/hstack/hstack';
 import IconButton from 'soapbox/components/ui/icon-button/icon-button';
-import EmojiPickerDropdown from 'soapbox/features/emoji/components/emoji-picker-dropdown';
+import EmojiPickerDropdown, { useGetCustomEmojies } from 'soapbox/features/emoji/components/emoji-picker-dropdown';
 import { useClickOutside, useFeatures, useSoapboxConfig } from 'soapbox/hooks';
 
 import type { Emoji } from 'soapbox/features/emoji';
+import type { Emoji as EmojiMart, CustomEmoji as EmojiMartCustom } from 'soapbox/features/emoji/data';
 
 interface IEmojiButton {
   /** Unicode emoji character. */
   emoji: string;
   /** Event handler when the emoji is clicked. */
-  onClick(emoji: string): void;
+  onClick(emoji: string, customEmojiSrc?: string): void;
   /** Extra class name on the <button> element. */
   className?: string;
   /** Tab order of the button. */
   tabIndex?: number;
+  /** list of available custom emojis */
+  customEmojis?: EmojiMart<EmojiMartCustom>[] | undefined;
 }
 
 /** Clickable emoji button that scales when hovered. */
-const EmojiButton: React.FC<IEmojiButton> = ({ emoji, className, onClick, tabIndex }): JSX.Element => {
+const EmojiButton: React.FC<IEmojiButton> = ({ emoji, className, onClick, tabIndex, customEmojis }): JSX.Element => {
+  let customEmojiSrc: string | undefined = undefined;
+  let nativeEmoji: string | undefined = undefined;
+  const customEmoji = customEmojis?.find(_emoji => _emoji.id === emoji);
+  if (customEmoji) {
+    customEmojiSrc = customEmoji?.skins[0].src;
+  } else {
+    nativeEmoji = emoji;
+  }
   const handleClick: React.EventHandler<React.MouseEvent> = (event) => {
     event.preventDefault();
     event.stopPropagation();
 
-    onClick(emoji);
+    onClick(emoji, customEmojiSrc);
   };
 
   return (
     <button className={clsx(className)} onClick={handleClick} tabIndex={tabIndex}>
-      <EmojiComponent className='h-6 w-6 duration-100 hover:scale-110' emoji={emoji} />
+      <EmojiComponent
+        className='h-6 w-6 duration-100 hover:scale-110'
+        emoji={nativeEmoji}
+        alt={emoji}
+        src={customEmojiSrc}
+      />
     </button>
   );
 };
@@ -70,6 +86,8 @@ const EmojiSelector: React.FC<IEmojiSelector> = ({
     placement,
     middleware: [offset(offsetOptions), shift()],
   });
+
+  const customEmojis = useGetCustomEmojies(customEmojiReacts);
 
   const handleExpand: React.MouseEventHandler = () => {
     setExpanded(true);
@@ -116,6 +134,7 @@ const EmojiSelector: React.FC<IEmojiSelector> = ({
           setVisible={setExpanded}
           update={update}
           withCustom={customEmojiReacts}
+          customEmojis={customEmojis}
           onPickEmoji={handlePickEmoji}
         />
       ) : (
@@ -127,6 +146,7 @@ const EmojiSelector: React.FC<IEmojiSelector> = ({
               key={i}
               emoji={emoji}
               onClick={onReact}
+              customEmojis={customEmojis}
               tabIndex={visible ? 0 : -1}
             />
           ))}
