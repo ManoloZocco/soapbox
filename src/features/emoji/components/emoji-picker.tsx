@@ -1,5 +1,5 @@
 import { Picker as EmojiPicker } from 'emoji-mart';
-import React, { useRef, useEffect } from 'react';
+import React, { useEffect } from 'react';
 
 import { joinPublicPath } from 'soapbox/utils/static';
 
@@ -14,15 +14,14 @@ const getImageURL = (set: string, name: string) => {
 };
 
 const Picker: React.FC<any> = (props) => {
-  const ref = useRef(null);
 
   useEffect(() => {
-    const input = { ...props, data, ref, getImageURL, getSpritesheetURL };
+    const input = { ...props, data, ref: props.emojiPickerDropdownRef, getImageURL, getSpritesheetURL };
 
     new EmojiPicker(input);
   }, []);
 
-  return <div ref={ref} />;
+  return <div ref={props.emojiPickerDropdownRef} />;
 };
 
 export default Picker;
