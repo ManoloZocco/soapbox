@@ -23,11 +23,11 @@
   "scripts": {
     "start": "vite serve",
     "dev": "vite serve",
-    "build": "vite build --emptyOutDir",
+    "build": "deno run -A npm:vite build --emptyOutDir",
     "preview": "vite preview",
     "i18n": "formatjs extract 'src/**/*.{ts,tsx}' --ignore '**/*.d.ts' --out-file build/messages.json && formatjs compile build/messages.json --out-file src/locales/en.json",
     "test": "vitest",
-    "lint": "npm run lint:js && npm run lint:sass",
+    "lint": "deno task lint:js && deno task lint:sass",
     "lint:js": "eslint --ext .js,.jsx,.cjs,.mjs,.ts,.tsx . --cache",
     "lint:sass": "stylelint src/styles/**/*.scss",
     "prepare": "husky install"
@@ -98,6 +98,7 @@
     "clsx": "^2.0.0",
     "comlink": "^4.4.1",
     "cssnano": "^6.0.0",
+    "csstype": "^3.1.3",
     "detect-passive-events": "^2.0.0",
     "emoji-datasource": "15.0.1",
     "emoji-mart": "^5.6.0",
