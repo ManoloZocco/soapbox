@@ -15,6 +15,7 @@ import { useIsMobile } from 'soapbox/hooks/useIsMobile.ts';
 import { useSettings } from 'soapbox/hooks/useSettings.ts';
 import { useTheme } from 'soapbox/hooks/useTheme.ts';
 
+import InstanceInfoPanel from '../ui/components/instance-info-panel.tsx';
 import Timeline from '../ui/components/timeline.tsx';
 
 import PinnedHostsPicker from './components/pinned-hosts-picker.tsx';
@@ -56,7 +57,7 @@ const RemoteTimeline: React.FC<IRemoteTimeline> = ({ params }) => {
   }, [onlyMedia]);
 
   return (
-    <Column label={instance} transparent={!isMobile}>
+    <Column label={'Global timeline'} transparent={!isMobile}>
       {instance && <PinnedHostsPicker host={instance} />}
 
       {!pinned && (
@@ -70,6 +71,10 @@ const RemoteTimeline: React.FC<IRemoteTimeline> = ({ params }) => {
             />
           </Text>
         </HStack>
+      )}
+
+      {isMobile && (
+        <InstanceInfoPanel host={instance} />
       )}
 
       <Timeline
