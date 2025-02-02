@@ -1,12 +1,11 @@
 import { throttle } from 'es-toolkit';
-import { List as ImmutableList } from 'immutable';
 import { defineMessages, IntlShape } from 'react-intl';
 
 import { HTTPError } from 'soapbox/api/HTTPError.ts';
 import api from 'soapbox/api/index.ts';
 import { isNativeEmoji } from 'soapbox/features/emoji/index.ts';
 import emojiSearch from 'soapbox/features/emoji/search.ts';
-import { normalizeTag } from 'soapbox/normalizers/index.ts';
+import { tagSchema, type Tag, Account, CustomEmoji, Group } from 'soapbox/schemas/index.ts';
 import { selectAccount, selectOwnAccount } from 'soapbox/selectors/index.ts';
 import { tagHistory } from 'soapbox/settings.ts';
 import toast from 'soapbox/toast.tsx';
@@ -24,9 +23,8 @@ import { createStatus } from './statuses.ts';
 import type { EditorState } from 'lexical';
 import type { AutoSuggestion } from 'soapbox/components/autosuggest-input.tsx';
 import type { Emoji } from 'soapbox/features/emoji/index.ts';
-import type { Account, CustomEmoji, Group } from 'soapbox/schemas/index.ts';
 import type { AppDispatch, RootState } from 'soapbox/store.ts';
-import type { APIEntity, Status, Tag } from 'soapbox/types/entities.ts';
+import type { APIEntity, Status } from 'soapbox/types/entities.ts';
 import type { History } from 'soapbox/types/history.ts';
 
 let cancelFetchComposeSuggestions: AbortController | undefined;
@@ -249,16 +247,16 @@ const handleComposeSubmit = (dispatch: AppDispatch, getState: () => RootState, c
 };
 
 const needsDescriptions = (state: RootState, composeId: string) => {
-  const media  = state.compose.get(composeId)!.media_attachments;
+  const media  = state.compose[composeId].media_attachments;
   const missingDescriptionModal = getSettings(state).get('missingDescriptionModal');
 
-  const hasMissing = media.filter(item => !item.description).size > 0;
+  const hasMissing = media.filter(item => !item.description).length > 0;
 
   return missingDescriptionModal && hasMissing;
 };
 
 const validateSchedule = (state: RootState, composeId: string) => {
-  const schedule = state.compose.get(composeId)?.schedule;
+  const schedule = state.compose[composeId]?.schedule;
   if (!schedule) return true;
 
   const fiveMinutesFromNow = new Date(new Date().getTime() + 300000);
@@ -278,7 +276,7 @@ const submitCompose = (composeId: string, opts: SubmitComposeOpts = {}) =>
     if (!isLoggedIn(getState)) return;
     const state = getState();
 
-    const compose = state.compose.get(composeId)!;
+    const compose = state.compose[composeId];
 
     const status   = compose.text;
     const media    = compose.media_attachments;
@@ -290,7 +288,7 @@ const submitCompose = (composeId: string, opts: SubmitComposeOpts = {}) =>
       return;
     }
 
-    if ((!status || !status.length) && media.size === 0) {
+    if ((!status || !status.length) && media.length === 0) {
       return;
     }
 
@@ -307,7 +305,8 @@ const submitCompose = (composeId: string, opts: SubmitComposeOpts = {}) =>
     const mentions: string[] | null = status.match(/(?:^|\s)@([^@\s]+(?:@[^@\s]+)?)/gi);
 
     if (mentions) {
-      to = to.union(mentions.map(mention => mention.trim().slice(1)));
+      const trimmedMentions = mentions.map(mention => mention.trim().slice(1));
+      to = new Set([...to, ...trimmedMentions]);
     }
 
     dispatch(submitComposeRequest(composeId));
@@ -326,7 +325,7 @@ const submitCompose = (composeId: string, opts: SubmitComposeOpts = {}) =>
       content_type: compose.content_type,
       poll: compose.poll,
       scheduled_at: compose.schedule,
-      to,
+      to: [...to],
     };
 
     if (compose.privacy === 'group') {
@@ -366,9 +365,9 @@ const uploadCompose = (composeId: string, files: FileList, intl: IntlShape) =>
     if (!isLoggedIn(getState)) return;
     const attachmentLimit = getState().instance.configuration.statuses.max_media_attachments;
 
-    const media  = getState().compose.get(composeId)?.media_attachments;
+    const media  = getState().compose[composeId]?.media_attachments;
     const progress: number[] = new Array(files.length).fill(0);
-    const mediaCount = media ? media.size : 0;
+    const mediaCount = media ? media.length : 0;
 
     if (files.length + mediaCount > attachmentLimit) {
       toast.error(messages.uploadErrorLimit);
@@ -534,7 +533,7 @@ const fetchComposeSuggestionsTags = (dispatch: AppDispatch, getState: () => Root
       type: 'hashtags',
     },
   }).then((response) => response.json()).then((data) => {
-    dispatch(updateSuggestionTags(composeId, token, data?.hashtags.map(normalizeTag)));
+    dispatch(updateSuggestionTags(composeId, token, data?.hashtags.map(tagSchema.parse)));
   }).catch(error => {
     if (error instanceof HTTPError) {
       toast.showAlertForError(error);
@@ -617,7 +616,7 @@ const selectComposeSuggestion = (composeId: string, position: number, token: str
     dispatch(action);
   };
 
-const updateSuggestionTags = (composeId: string, token: string, tags: ImmutableList<Tag>) => ({
+const updateSuggestionTags = (composeId: string, token: string, tags: Tag[]) => ({
   type: COMPOSE_SUGGESTION_TAGS_UPDATE,
   id: composeId,
   token,
@@ -633,14 +632,14 @@ const updateTagHistory = (composeId: string, tags: string[]) => ({
 const insertIntoTagHistory = (composeId: string, recognizedTags: APIEntity[], text: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
-    const oldHistory = state.compose.get(composeId)!.tagHistory;
+    const oldHistory = state.compose[composeId]!.tagHistory;
     const me = state.me;
     const names = recognizedTags
       .filter(tag => text.match(new RegExp(`#${tag.name}`, 'i')))
       .map(tag => tag.name);
     const intersectedOldHistory = oldHistory.filter(name => names.findIndex(newName => newName.toLowerCase() === name.toLowerCase()) === -1);
 
-    names.push(...intersectedOldHistory.toJS());
+    names.push(...intersectedOldHistory);
 
     const newHistory = names.slice(0, 1000);
 

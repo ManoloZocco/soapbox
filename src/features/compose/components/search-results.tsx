@@ -1,5 +1,6 @@
 import xIcon from '@tabler/icons/outline/x.svg';
 import clsx from 'clsx';
+import { OrderedSet as ImmutableOrderedSet } from 'immutable';
 import { useEffect, useRef } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
@@ -21,7 +22,6 @@ import PlaceholderStatus from 'soapbox/features/placeholder/components/placehold
 import { useAppDispatch } from 'soapbox/hooks/useAppDispatch.ts';
 import { useAppSelector } from 'soapbox/hooks/useAppSelector.ts';
 
-import type { OrderedSet as ImmutableOrderedSet } from 'immutable';
 import type { VirtuosoHandle } from 'react-virtuoso';
 import type { SearchFilter } from 'soapbox/reducers/search.ts';
 
@@ -49,7 +49,7 @@ const SearchResults = () => {
   const { account } = useAccount(filterByAccount);
 
   const handleLoadMore = () => {
-    if (results.accounts.size || results.statuses.size || results.hashtags.size) {
+    if (results.accounts.size || results.statuses.size || results.hashtags.length) {
       dispatch(expandSearch(selectedFilter));
     } else if (nextTrendingStatuses) {
       dispatch(expandTrendingStatuses(nextTrendingStatuses));
@@ -194,8 +194,8 @@ const SearchResults = () => {
     loaded = results.hashtagsLoaded;
     placeholderComponent = PlaceholderHashtag;
 
-    if (results.hashtags && results.hashtags.size > 0) {
-      searchResults = results.hashtags.map(hashtag => <Hashtag key={hashtag.name} hashtag={hashtag} />);
+    if (results.hashtags && results.hashtags.length > 0) {
+      searchResults = [...results.hashtags].map(hashtag => <Hashtag key={hashtag.name} hashtag={hashtag} />);
     } else if (!submitted && suggestions && !suggestions.isEmpty()) {
       searchResults = trends.map(hashtag => <Hashtag key={hashtag.name} hashtag={hashtag} />);
     } else if (loaded) {
@@ -235,7 +235,11 @@ const SearchResults = () => {
           key={selectedFilter}
           scrollKey={`${selectedFilter}:${value}`}
           isLoading={submitted && !loaded}
-          showLoading={submitted && !loaded && searchResults?.isEmpty()}
+          showLoading={submitted && !loaded && (
+            !searchResults ||
+            (Array.isArray(searchResults) && searchResults.length === 0) ||
+            (ImmutableOrderedSet.isOrderedSet(searchResults) && searchResults.size === 0)
+          )}
           hasMore={hasMore}
           onLoadMore={handleLoadMore}
           placeholderComponent={placeholderComponent}
