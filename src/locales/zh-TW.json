@@ -1173,7 +1173,6 @@
   "nostr_signup.captcha_check_button.checking": "確認中…",
   "nostr_signup.captcha_instruction": "將拼圖塊拖曳到正確的位置即可完成拼圖。",
   "nostr_signup.captcha_message.error": "似乎發生了錯誤。請再試一次。如果問題仍然存在，請聯絡我們。",
-  "nostr_signup.captcha_message.misbehaving": "看起來 {instance} 似乎發生問題。請再試一次。如果錯誤仍然存在，請稍後再試。",
   "nostr_signup.captcha_message.sucess": "太棒了！！您已成功完成驗證碼。",
   "nostr_signup.captcha_message.wrong": "哎呀！您的驗證碼驗證似乎不正確。請再試一次。",
   "nostr_signup.captcha_reset_button": "重置拼圖",

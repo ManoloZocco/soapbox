@@ -1176,7 +1176,6 @@
   "nostr_signup.captcha_check_button.checking": "Á Sheiceáil…",
   "nostr_signup.captcha_instruction": "Comhlánaigh an bhfreagra ag dragging an píosa bhfreagra ar an suíomh ceart.",
   "nostr_signup.captcha_message.error": "Dealraíonn sé gur tharla earráid. Bain triail eile as. Má leanann an fhadhb ar aghaidh, déan teagmháil linn.",
-  "nostr_signup.captcha_message.misbehaving": "Tá an chuma ar an scéal go bhfuil fadhbanna againn leis an {instance}. Bain triail eile as. Má leanann an earráid, bain triail eile as níos déanaí.",
   "nostr_signup.captcha_message.sucess": "Dochreidte! D'éirigh leat an captcha a chríochnú.",
   "nostr_signup.captcha_message.wrong": "Fonsaí! Tá an chuma ar an scéal go raibh do fhreagra captcha mícheart. Bain triail eile as.",
   "nostr_signup.captcha_reset_button": "Athshocraigh puzal",
