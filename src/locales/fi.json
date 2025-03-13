@@ -319,8 +319,6 @@
   "reset_password.password.label": "Password",
   "search.placeholder": "Hae",
   "search_results.accounts": "Ihmiset",
-  "search_results.hashtags": "Hashtagit",
-  "search_results.statuses": "Tuuttaukset",
   "security.fields.email.label": "Email address",
   "security.fields.password.label": "Password",
   "security.headers.delete": "Delete Account",

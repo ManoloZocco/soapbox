@@ -322,8 +322,6 @@
   "reset_password.password.label": "Password",
   "search.placeholder": "Otsi",
   "search_results.accounts": "Inimesed",
-  "search_results.hashtags": "Sildid",
-  "search_results.statuses": "Tuudid",
   "security.fields.email.label": "Email address",
   "security.fields.password.label": "Password",
   "security.headers.delete": "Delete Account",

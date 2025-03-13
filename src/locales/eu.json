@@ -322,8 +322,6 @@
   "reset_password.password.label": "Password",
   "search.placeholder": "Bilatu",
   "search_results.accounts": "Jendea",
-  "search_results.hashtags": "Traolak",
-  "search_results.statuses": "Post-ak",
   "security.fields.email.label": "Email address",
   "security.fields.password.label": "Password",
   "security.headers.delete": "Delete Account",

@@ -288,8 +288,6 @@
   "reset_password.password.label": "Password",
   "search.placeholder": "ძებნა",
   "search_results.accounts": "ხალხი",
-  "search_results.hashtags": "ჰეშტეგები",
-  "search_results.statuses": "ტუტები",
   "security.fields.email.label": "Email address",
   "security.fields.password.label": "Password",
   "security.headers.delete": "Delete Account",

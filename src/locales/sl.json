@@ -320,8 +320,6 @@
   "reset_password.password.label": "Password",
   "search.placeholder": "Iskanje",
   "search_results.accounts": "Ljudje",
-  "search_results.hashtags": "Ključniki",
-  "search_results.statuses": "Tuti",
   "security.fields.email.label": "Email address",
   "security.fields.password.label": "Password",
   "security.headers.delete": "Delete Account",

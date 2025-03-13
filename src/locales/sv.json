@@ -320,8 +320,6 @@
   "reset_password.password.label": "Password",
   "search.placeholder": "Sök",
   "search_results.accounts": "Människor",
-  "search_results.hashtags": "Hashtaggar",
-  "search_results.statuses": "Posts",
   "security.fields.email.label": "Email address",
   "security.fields.password.label": "Password",
   "security.headers.delete": "Delete Account",

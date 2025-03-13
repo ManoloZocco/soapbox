@@ -315,8 +315,6 @@
   "reset_password.password.label": "Password",
   "search.placeholder": "శోధన",
   "search_results.accounts": "వ్యక్తులు",
-  "search_results.hashtags": "హాష్ ట్యాగ్లు",
-  "search_results.statuses": "టూట్లు",
   "security.fields.email.label": "Email address",
   "security.fields.password.label": "Password",
   "security.headers.delete": "Delete Account",
