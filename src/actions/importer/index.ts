@@ -1,7 +1,7 @@
 import { importEntities } from 'soapbox/entity-store/actions.ts';
 import { Entities } from 'soapbox/entity-store/entities.ts';
-import { Group, accountSchema, groupSchema } from 'soapbox/schemas/index.ts';
-import { filteredArray } from 'soapbox/schemas/utils.ts';
+import { Group, accountSchema, groupSchema, statusSchema } from 'soapbox/schemas/index.ts';
+import { filteredArray, filteredArrayAsync } from 'soapbox/schemas/utils.ts';
 
 import { getSettings } from '../settings.ts';
 
@@ -95,32 +95,35 @@ const importFetchedGroups = (groups: APIEntity[]) => {
 };
 
 const importFetchedStatus = (status: APIEntity, idempotencyKey?: string) =>
-  (dispatch: AppDispatch) => {
+  async (dispatch: AppDispatch) => {
+    const result = await statusSchema.safeParseAsync(status);
+
     // Skip broken statuses
-    if (isBroken(status)) return;
+    if (!result.success) return;
+    status = result.data;
 
     if (status.reblog?.id) {
-      dispatch(importFetchedStatus(status.reblog));
+      await dispatch(importFetchedStatus(status.reblog));
     }
 
     // Fedibird quotes
     if (status.quote?.id) {
-      dispatch(importFetchedStatus(status.quote));
+      await dispatch(importFetchedStatus(status.quote));
     }
 
     // Pleroma quotes
     if (status.pleroma?.quote?.id) {
-      dispatch(importFetchedStatus(status.pleroma.quote));
+      await dispatch(importFetchedStatus(status.pleroma.quote));
     }
 
     // Fedibird quote from reblog
     if (status.reblog?.quote?.id) {
-      dispatch(importFetchedStatus(status.reblog.quote));
+      await dispatch(importFetchedStatus(status.reblog.quote));
     }
 
     // Pleroma quote from reblog
     if (status.reblog?.pleroma?.quote?.id) {
-      dispatch(importFetchedStatus(status.reblog.pleroma.quote));
+      await dispatch(importFetchedStatus(status.reblog.pleroma.quote));
     }
 
     if (status.poll?.id) {
@@ -135,32 +138,15 @@ const importFetchedStatus = (status: APIEntity, idempotencyKey?: string) =>
     dispatch(importStatus(status, idempotencyKey));
   };
 
-// Sometimes Pleroma can return an empty account,
-// or a repost can appear of a deleted account. Skip these statuses.
-const isBroken = (status: APIEntity) => {
-  try {
-    // Skip empty accounts
-    // https://gitlab.com/soapbox-pub/soapbox/-/issues/424
-    if (!status.account.id) return true;
-    // Skip broken reposts
-    // https://gitlab.com/soapbox-pub/rebased/-/issues/28
-    if (status.reblog && !status.reblog.account.id) return true;
-    return false;
-  } catch (e) {
-    return true;
-  }
-};
-
 const importFetchedStatuses = (statuses: APIEntity[]) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
+  async (dispatch: AppDispatch, getState: () => RootState) => {
     const accounts: APIEntity[] = [];
     const normalStatuses: APIEntity[] = [];
     const polls: APIEntity[] = [];
 
-    function processStatus(status: APIEntity) {
-      // Skip broken statuses
-      if (isBroken(status)) return;
+    statuses = await filteredArrayAsync(statusSchema).parseAsync(statuses);
 
+    async function processStatus(status: APIEntity) {
       normalStatuses.push(status);
       accounts.push(status.account);
 
@@ -186,7 +172,7 @@ const importFetchedStatuses = (statuses: APIEntity[]) =>
       }
     }
 
-    statuses.forEach(processStatus);
+    await Promise.all((statuses.map(processStatus)));
 
     dispatch(importPolls(polls));
     dispatch(importFetchedAccounts(accounts));
