@@ -21,17 +21,17 @@
     "url": "lightning:alex@alexgleason.me"
   },
   "scripts": {
-    "start": "vite serve",
-    "dev": "vite serve",
-    "build": "vite build --emptyOutDir",
+    "start": "bunx --bun vite serve",
+    "dev": "bunx --bun vite serve",
+    "build": "bunx --bun vite build --emptyOutDir",
     "check": "tsc --noEmit",
-    "preview": "vite preview",
+    "preview": "bunx --bun vite preview",
     "i18n": "formatjs extract 'src/**/*.{ts,tsx}' --ignore '**/*.d.ts' --out-file build/messages.json && formatjs compile build/messages.json --out-file src/locales/en.json",
-    "i18n:check": "yarn i18n && git diff --quiet src/locales || (echo \"Locale files are out of date. Please run `yarn i18n`\" && exit 1)",
+    "i18n:check": "bun i18n && git diff --quiet src/locales || (echo \"Locale files are out of date. Please run `bun i18n`\" && exit 1)",
     "test": "vitest",
     "lint": "npm run lint:js",
     "lint:js": "eslint --ext .js,.jsx,.cjs,.mjs,.ts,.tsx . --cache",
-    "ci": "concurrently --kill-others-on-fail yarn:lint yarn:i18n:check yarn:check yarn:build",
+    "ci": "concurrently --kill-others-on-fail bun:lint bun:i18n:check bun:check bun:build",
     "prepare": "husky install"
   },
   "license": "AGPL-3.0-or-later",
