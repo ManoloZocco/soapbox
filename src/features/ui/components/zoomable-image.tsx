@@ -20,6 +20,7 @@ interface IZoomableImage {
   alt?: string;
   src: string;
   onClick?: React.MouseEventHandler;
+  isMobile?: boolean;
 }
 
 class ZoomableImage extends PureComponent<IZoomableImage> {
@@ -32,11 +33,20 @@ class ZoomableImage extends PureComponent<IZoomableImage> {
 
   state = {
     scale: MIN_SCALE,
+    isDragging: false,
   };
 
   container: HTMLDivElement | null = null;
   image: HTMLImageElement | null = null;
   lastDistance = 0;
+  isDragging = false;
+  isMouseDown = false;
+  clickStartTime = 0;
+  startX = 0;
+  startY = 0;
+  startScrollLeft = 0;
+  startScrollTop = 0;
+  isMobile = this.props.isMobile;
 
   componentDidMount() {
     this.container?.addEventListener('touchstart', this.handleTouchStart);
@@ -47,7 +57,7 @@ class ZoomableImage extends PureComponent<IZoomableImage> {
 
   componentWillUnmount() {
     this.container?.removeEventListener('touchstart', this.handleTouchStart);
-    this.container?.removeEventListener('touchend', this.handleTouchMove);
+    this.container?.removeEventListener('touchmove', this.handleTouchMove);
   }
 
   handleTouchStart = (e: TouchEvent) => {
@@ -81,11 +91,54 @@ class ZoomableImage extends PureComponent<IZoomableImage> {
     this.lastDistance = distance;
   };
 
+  handleMouseDown = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (this.state.isDragging) {
+      this.setState({ isDragging: false });
+    }
+
+    if (this.state.scale === 1 || !this.container) return;
+
+    this.isDragging = true;
+    this.startX = e.clientX;
+    this.startY = e.clientY;
+    this.startScrollLeft = this.container.scrollLeft;
+    this.startScrollTop = this.container.scrollTop;
+
+    window.addEventListener('mousemove', this.handleMouseMove);
+    window.addEventListener('mouseup', this.handleMouseUp);
+  };
+
+  handleMouseMove = (e: MouseEvent) => {
+    if (!this.isDragging || !this.container) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    const deltaX = this.startX - e.clientX;
+    const deltaY = this.startY - e.clientY;
+
+    if (Math.abs(deltaX) > 5 || Math.abs(deltaY) > 5) this.setState({ isDragging: true });
+
+    this.container.scrollLeft = this.startScrollLeft + deltaX;
+    this.container.scrollTop = this.startScrollTop + deltaY;
+  };
+
+  handleMouseUp = (e: MouseEvent) => {
+    this.isDragging = false;
+    window.removeEventListener('mousemove', this.handleMouseMove);
+    window.removeEventListener('mouseup', this.handleMouseUp);
+  };
+
+
+
   zoom(nextScale: number, midpoint: Point) {
-    if (!this.container) return;
+    if (!this.container || this.state.isDragging) return;
 
     const { scale } = this.state;
-    const { scrollLeft, scrollTop } = this.container;
+    const { scrollLeft, scrollTop,  clientWidth, clientHeight } = this.container;
 
     // math memo:
     // x = (scrollLeft + midpoint.x) / scrollWidth
@@ -93,6 +146,9 @@ class ZoomableImage extends PureComponent<IZoomableImage> {
     // scrollWidth = clientWidth * scale
     // scrollWidth' = clientWidth * nextScale
     // Solve x = x' for nextScrollLeft
+    const originX = (midpoint.x / clientWidth) * 100;
+    const originY = (midpoint.y / clientHeight) * 100;
+
     const nextScrollLeft = (scrollLeft + midpoint.x) * nextScale / scale - midpoint.x;
     const nextScrollTop = (scrollTop + midpoint.y) * nextScale / scale - midpoint.y;
 
@@ -100,14 +156,30 @@ class ZoomableImage extends PureComponent<IZoomableImage> {
       if (!this.container) return;
       this.container.scrollLeft = nextScrollLeft;
       this.container.scrollTop = nextScrollTop;
+      if (!this.isMobile) this.image!.style.transformOrigin = `${originX}% ${originY}%`;
     });
   }
 
   handleClick: React.MouseEventHandler = e => {
-    // don't propagate event to MediaModal
     e.stopPropagation();
-    const handler = this.props.onClick;
-    if (handler) handler(e);
+
+    if (this.isMobile) {
+      const handler = this.props.onClick;
+      if (handler) handler(e);
+    } else {
+      if (this.state.scale !== 1) {
+        this.zoom(1, { x: 0, y: 0 });
+      } else {
+        if (!this.image) return;
+
+        const rect = this.image.getBoundingClientRect();
+        const clickX = e.clientX - rect.left;
+        const clickY = e.clientY - rect.top;
+
+        const midpoint: Point = { x: clickX, y: clickY };
+        this.zoom(2, midpoint);
+      }
+    }
   };
 
   setContainerRef = (c: HTMLDivElement) => {
@@ -127,20 +199,21 @@ class ZoomableImage extends PureComponent<IZoomableImage> {
       <div
         className='relative flex size-full items-center justify-center'
         ref={this.setContainerRef}
-        style={{ overflow }}
+        style={{ overflow, cursor: scale > 1 ? 'grab' : 'default' }}
       >
         <img
           role='presentation'
           ref={this.setImageRef}
           alt={alt}
-          className={clsx('size-auto max-h-[80%] max-w-full object-contain', { 'size-full max-h-full': scale !== 1 })}
+          className={clsx('size-auto max-h-[80%] max-w-full object-contain', scale !== 1 ? 'size-full' : 'hover:cursor-pointer')}
           title={alt}
           src={src}
           style={{
             transform: `scale(${scale})`,
-            transformOrigin: '0 0',
+            transformOrigin: `${scale > 1 && !this.isMobile ? 'center' : '0 0'}`,
           }}
           onClick={this.handleClick}
+          onMouseDown={this.handleMouseDown}
         />
       </div>
     );

@@ -12,6 +12,8 @@ interface IImageLoader {
   width?: number;
   height?: number;
   onClick?: React.MouseEventHandler;
+  isMobile?: boolean;
+
 }
 
 class ImageLoader extends PureComponent<IImageLoader> {
@@ -135,7 +137,7 @@ class ImageLoader extends PureComponent<IImageLoader> {
     const { alt, src, width, height, onClick } = this.props;
     const { loading } = this.state;
 
-    const className = 'relative h-screen flex items-center justify-center flex-col';
+    const className = clsx('relative flex h-screen w-full grow flex-col items-center justify-center');
 
     return (
       <div className={className}>
@@ -154,6 +156,7 @@ class ImageLoader extends PureComponent<IImageLoader> {
             alt={alt}
             src={src}
             onClick={onClick}
+            isMobile={this.props.isMobile}
           />
         )}
       </div>

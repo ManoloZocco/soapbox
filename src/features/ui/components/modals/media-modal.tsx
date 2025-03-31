@@ -24,6 +24,7 @@ import PlaceholderStatus from 'soapbox/features/placeholder/components/placehold
 import Thread from 'soapbox/features/status/components/thread.tsx';
 import Video from 'soapbox/features/video/index.tsx';
 import { useAppDispatch } from 'soapbox/hooks/useAppDispatch.ts';
+import { useIsMobile } from 'soapbox/hooks/useIsMobile.ts';
 import { userTouching } from 'soapbox/is-mobile.ts';
 import { normalizeStatus } from 'soapbox/normalizers/index.ts';
 import { Status as StatusEntity, Attachment } from 'soapbox/schemas/index.ts';
@@ -72,6 +73,7 @@ const MediaModal: React.FC<IMediaModal> = (props) => {
   const dispatch = useAppDispatch();
   const history = useHistory();
   const intl = useIntl();
+  const isMobile = useIsMobile();
 
   const actualStatus = status ? getActualStatus(status) : undefined;
 
@@ -143,6 +145,7 @@ const MediaModal: React.FC<IMediaModal> = (props) => {
           alt={attachment.description}
           key={attachment.url}
           onClick={toggleNavigation}
+          isMobile={isMobile}
         />
       );
     } else if (attachment.type === 'video') {
@@ -241,7 +244,7 @@ const MediaModal: React.FC<IMediaModal> = (props) => {
   };
 
   return (
-    <div className='media-modal pointer-events-auto fixed inset-0 z-[9999] flex size-full bg-gray-900/90'>
+    <div className='pointer-events-auto fixed inset-0 z-[9999] flex size-full bg-gray-900/90'>
       <div
         className='absolute inset-0'
         role='presentation'
@@ -256,7 +259,7 @@ const MediaModal: React.FC<IMediaModal> = (props) => {
           }
           justifyContent='between'
         >
-          <Stack className='relative h-full'>
+          <Stack className='relative h-full items-center'>
             <HStack
               alignItems='center'
               justifyContent='between'
@@ -295,10 +298,10 @@ const MediaModal: React.FC<IMediaModal> = (props) => {
 
             {/* Height based on height of top/bottom bars */}
             <div
-              className='relative h-[calc(100vh-120px)] w-full grow'
+              className='relative flex h-[calc(100vh-120px)] w-full grow items-center justify-center'
             >
               {hasMultipleImages && (
-                <div className={clsx('absolute inset-y-0 left-5 z-10 flex items-center transition-opacity', navigationHiddenClassName)}>
+                <div className={clsx('absolute left-5 z-10 flex items-center transition-opacity', navigationHiddenClassName)}>
                   <button
                     tabIndex={0}
                     className='flex size-10 items-center justify-center rounded-full bg-gray-900 text-white'
@@ -310,23 +313,20 @@ const MediaModal: React.FC<IMediaModal> = (props) => {
                 </div>
               )}
 
-              <div className='size-full'>
-                <ReactSwipeableViews
-                  style={swipeableViewsStyle}
-                  containerStyle={containerStyle}
-                  onChangeIndex={handleSwipe}
-                  className='flex items-center justify-center'
-                  index={getIndex()}
-                >
-                  {content}
-                </ReactSwipeableViews>
-              </div>
+              <ReactSwipeableViews
+                style={swipeableViewsStyle}
+                containerStyle={containerStyle}
+                onChangeIndex={handleSwipe}
+                index={getIndex()}
+              >
+                {content}
+              </ReactSwipeableViews>
 
               {hasMultipleImages && (
-                <div className={clsx('absolute inset-y-0 right-5 z-10 flex items-center transition-opacity', navigationHiddenClassName)}>
+                <div className={clsx('absolute right-5 flex items-center transition-opacity', navigationHiddenClassName)}>
                   <button
                     tabIndex={0}
-                    className='flex size-10 items-center justify-center rounded-full bg-gray-900 text-white'
+                    className='z-10 flex size-10 items-center justify-center rounded-full bg-gray-900 text-white'
                     onClick={handleNextClick}
                     aria-label={intl.formatMessage(messages.next)}
                   >
@@ -336,10 +336,10 @@ const MediaModal: React.FC<IMediaModal> = (props) => {
               )}
             </div>
 
-            {actualStatus && (
+            {isFullScreen && actualStatus && (
               <HStack
                 justifyContent='center'
-                className={clsx('absolute bottom-2 flex w-full transition-opacity', navigationHiddenClassName)}
+                className={clsx('absolute bottom-2 flex transition-opacity', navigationHiddenClassName)}
               >
                 <StatusActionBar
                   status={normalizeStatus(actualStatus) as LegacyStatus}
