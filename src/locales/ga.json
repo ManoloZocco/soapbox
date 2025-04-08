@@ -1316,6 +1316,7 @@
   "preferences.fields.demetricator_label": "Úsáid Demetricator",
   "preferences.fields.demo_hint": "Bain úsáid as an lógó soapbox réamhshocraithe agus scéim dathanna. Úsáideach chun screenshots a ghlacadh.",
   "preferences.fields.demo_label": "Mód taispeána",
+  "preferences.fields.disclose_client": "Nochtadh cliant",
   "preferences.fields.display_media.default": "Folaigh poist atá marcáilte mar phoist íogaire",
   "preferences.fields.display_media.hide_all": "Always hide media",
   "preferences.fields.display_media.show_all": "Always show media",
