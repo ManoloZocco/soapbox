@@ -305,8 +305,6 @@
   "reset_password.password.label": "Password",
   "search.placeholder": "Kërkoni",
   "search_results.accounts": "Persona",
-  "search_results.hashtags": "Hashtagë",
-  "search_results.statuses": "Mesazhe",
   "security.fields.email.label": "Email address",
   "security.fields.password.label": "Password",
   "security.headers.delete": "Delete Account",

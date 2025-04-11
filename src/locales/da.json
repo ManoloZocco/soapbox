@@ -321,7 +321,6 @@
   "reset_password.password.label": "Password",
   "search.placeholder": "Søg",
   "search_results.accounts": "Personer",
-  "search_results.statuses": "Trut",
   "security.fields.email.label": "Email address",
   "security.fields.password.label": "Password",
   "security.headers.delete": "Delete Account",

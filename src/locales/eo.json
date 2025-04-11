@@ -322,8 +322,6 @@
   "reset_password.password.label": "Password",
   "search.placeholder": "Serĉi",
   "search_results.accounts": "Homoj",
-  "search_results.hashtags": "Kradvortoj",
-  "search_results.statuses": "Mesaĝoj",
   "security.fields.email.label": "Email address",
   "security.fields.password.label": "Password",
   "security.headers.delete": "Delete Account",

@@ -324,8 +324,6 @@
   "reset_password.password.label": "Password",
   "search.placeholder": "ค้นหา",
   "search_results.accounts": "ผู้คน",
-  "search_results.hashtags": "แฮชแท็ก",
-  "search_results.statuses": "โพสต์",
   "security.fields.email.label": "Email address",
   "security.fields.password.label": "Password",
   "security.headers.delete": "Delete Account",

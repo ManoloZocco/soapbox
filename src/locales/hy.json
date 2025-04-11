@@ -269,7 +269,6 @@
   "reset_password.password.label": "Password",
   "search.placeholder": "Փնտրել",
   "search_results.accounts": "Մարդիկ",
-  "search_results.statuses": "Posts",
   "security.fields.email.label": "Email address",
   "security.fields.password.label": "Password",
   "security.headers.delete": "Delete Account",

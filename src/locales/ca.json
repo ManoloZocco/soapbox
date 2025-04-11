@@ -462,8 +462,6 @@
   "reset_password.password.label": "Password",
   "search.placeholder": "Cercar",
   "search_results.accounts": "Gent",
-  "search_results.hashtags": "Etiquetes",
-  "search_results.statuses": "Publicacions",
   "security.codes.fail": "No s'han pogut recuperar els codis de còpia de seguretat",
   "security.confirm.fail": "Codi o contrasenya incorrectes. Prova-ho de nou.",
   "security.delete_account.fail": "Ha fallat la supressió del compte.",

@@ -560,8 +560,6 @@
   "scheduled_status.cancel": "Zrušit",
   "search.placeholder": "Hledat",
   "search_results.accounts": "Lidé",
-  "search_results.hashtags": "Hashtagy",
-  "search_results.statuses": "Příspěvky",
   "security.codes.fail": "Selhalo načítání záložních kódů",
   "security.confirm.fail": "Špatný kód nebo heslo. Zkuste to znova.",
   "security.delete_account.fail": "Smazání účtu selhalo.",

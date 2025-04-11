@@ -321,8 +321,6 @@
   "reset_password.password.label": "Password",
   "search.placeholder": "খুঁজতে",
   "search_results.accounts": "মানুষ",
-  "search_results.hashtags": "হ্যাশট্যাগগুলি",
-  "search_results.statuses": "টুট",
   "security.fields.email.label": "Email address",
   "security.fields.password.label": "Password",
   "security.headers.delete": "Delete Account",
